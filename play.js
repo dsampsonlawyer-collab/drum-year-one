@@ -60,17 +60,18 @@ const mf=m=>440*Math.pow(2,(m-69)/12);
 function bass(t,f,dur){const o=ac.createOscillator(),g=ac.createGain(),lp=ac.createBiquadFilter();o.type='sawtooth';o.frequency.value=f;lp.type='lowpass';lp.frequency.value=520;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.32,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(lp);lp.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+dur+.02)}
 function chord(t,fs,dur){const g=ac.createGain(),lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.09,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+dur);lp.connect(g);g.connect(ac.destination);fs.forEach(f=>{const o=ac.createOscillator();o.type='triangle';o.frequency.value=f;o.connect(lp);o.start(t);o.stop(t+dur+.02)})}
 function tick(t,acc){const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=acc?2600:2000;g.gain.setValueAtTime(.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.04);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.05)}
-function schedBar(bar,t){
-  const d=ST[tc.style],barDur=d.beats*60/tempo,sd=barDur/d.steps;
-  const rootPc=(tc.key+bar.ch[0])%12,root=36+rootPc,minor=bar.ch[1];
+function schedBarX(style,key,ch,t,tmp,clkOn){
+  const d=ST[style],barDur=d.beats*60/tmp,sd=barDur/d.steps;
+  const rootPc=(key+ch[0])%12,root=36+rootPc,minor=ch[1];
   const notes=[root+12,root+12+(minor?3:4),root+12+7];
   for(let i=0;i<d.steps;i++){
     const t0=t+i*sd,b=d.bass[i];
     if(b)bass(t0,mf(b===2?root+7:b===3?root+12:root),sd*1.6);
     if(d.chord[i])chord(t0,notes.map(mf),Math.min(sd*3,barDur*.9));
   }
-  if(clk)for(let b=0;b<d.beats;b++)tick(t+b*barDur/d.beats,b===0);
+  if(clkOn)for(let b=0;b<d.beats;b++)tick(t+b*barDur/d.beats,b===0);
 }
+function schedBar(bar,t){schedBarX(tc.style,tc.key,bar.ch,t,tempo,clk)}
 function ui(k2,t){uiT.push(setTimeout(()=>{const b=tc.bars[k2];const el=$q('pl-sec');if(!el)return;el.textContent=b.sec;$q('pl-bar').textContent='Bar '+(b.i+1)+' of '+b.n;$q('pl-fill').style.visibility=b.fill?'visible':'hidden';$q('pl-prog').style.width=((k2+1)/tc.bars.length*100)+'%'},Math.max(0,(t-ac.currentTime)*1000)))}
 function sched(){
   const d=ST[tc.style],barDur=d.beats*60/tempo;
@@ -114,4 +115,5 @@ function open(w){
 }
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{if(run&&b.dataset.v!=='vault')stop()}));
 window.Player={open,cfg,stop,count:52,active:()=>run};
+window.Band={ctx:()=>{try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){}return ac},bar:schedBarX,tick:(t,a)=>tick(t,a)};
 })();

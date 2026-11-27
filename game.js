@@ -44,11 +44,12 @@ function compute(){
   const rud=Object.values(B()).filter(v=>v>=80).length;
   const st=streaks();
   const takes=Math.min(40,S.takeCount||0);
-  const xp=lessons*10+tests*5+ms*100+ex*150+rud*25+st.total*15+takes*5;
+  const hs=Object.values(S.hero||{});const stars=hs.reduce((a,v)=>a+(v.stars||0),0);const played=hs.length;
+  const xp=lessons*10+tests*5+ms*100+ex*150+rud*25+st.total*15+takes*5+stars*10;
   let li=0;LEVELS.forEach((l,i)=>{if(xp>=l[0])li=i});
   const next=LEVELS[li+1];
   const songs=SONGS.filter(s=>itemDone(s.k)).length;
-  return {lessons,weeks,tests,ms,ex,rud,st,xp,li,next,songs};
+  return {lessons,weeks,tests,ms,ex,rud,st,xp,li,next,songs,stars,played};
 }
 const BADGES=[
 ['First beat','Complete your first lesson',c=>c.lessons>=1],
@@ -65,7 +66,10 @@ const BADGES=[
 ['Showtime','Finish the final recital',c=>itemDone('q4')],
 ['Full vault','Unlock all 52 tracks',c=>c.weeks>=52],
 ['On the record','Record your first take',c=>(S.takeCount||0)>=1],
-['Studio time','Record 10 takes',c=>(S.takeCount||0)>=10]
+['Studio time','Record 10 takes',c=>(S.takeCount||0)>=10],
+['Opening act','Finish your first song in Hero mode',c=>c.played>=1],
+['Headliner','Earn 4 stars or more on any song',c=>Object.values(S.hero||{}).some(v=>v.stars>=4)],
+['Full setlist','Play all 16 songs',c=>c.played>=16]
 ];
 function unlockIds(c){
   const ids=[];
@@ -101,11 +105,12 @@ function renderVault(c){
     }
     h+=`</div></details>`;
   });
-  h+=`<div class="qh">Song challenges</div><div class="sub" style="margin:0 4px 8px">Real songs to play along to on your own music app. Pass each milestone and quarter exam to unlock the next. Tempos are approximate: check them with Tap tempo in Tools, listen first, and skip any that feel too hard.</div>`;
+  h+=`<div class="qh">Songs: Hero mode</div><div class="sub" style="margin:0 4px 8px">Original songs written for this app. Notes fall toward the line: hit them in time on the screen pads, or on your real drums with the microphone. Pass each milestone and quarter exam to unlock the next song. Earn stars for XP.</div>`;
   SONGS.forEach(s=>{
-    const ok=itemDone(s.k);
+    const ok=itemDone(s.k),d=Hero.defs[s.k];
     const need=s.k[0]==='m'?'Pass Milestone '+s.k.slice(1):'Pass the Quarter '+s.k.slice(1)+' exam';
-    h+=ok?`<div class="card" style="padding:12px 16px"><strong>${esc2(s.t)}</strong><div class="sub">${esc2(s.a)}${s.bpm?' · '+esc2(s.bpm)+' BPM':''} · ${esc2(s.f)}</div><p style="margin:6px 0 0;font-size:14px">${esc2(s.m)}</p></div>`
+    const b=(S.hero||{})[s.k];
+    h+=ok?`<div class="card" style="padding:12px 16px"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><strong>${esc2(d.title)}</strong><div class="sub">${d.bpm} BPM · ${esc2(s.f)}</div><div class="sub">${b?'\u2605'.repeat(b.stars)+'\u2606'.repeat(5-b.stars)+' · best '+b.score.toLocaleString():'Not played yet'}</div></div><button class="vbtn" style="margin:0" data-hero="${s.k}">Play</button></div><p style="margin:6px 0 0;font-size:14px">${esc2(s.m)}</p><div class="sub" style="margin-top:6px">Real-world match: ${esc2(s.t)} (${esc2(s.a)}). Find it on your own music app to try the same feel.</div></div>`
       :`<div class="card lk" style="padding:12px 16px"><strong>🔒 Locked song</strong><div class="sub">${need} to unlock</div></div>`;
   });
   h+=`<div class="qh">Badges</div><div class="bdg">`;
@@ -165,6 +170,7 @@ document.addEventListener('click',e=>{
   if(id==='bkrestore'){try{const o=JSON.parse(decodeURIComponent(escape(atob($q('bk').value.trim()))));if(!o||typeof o.d!=='object')throw 0;S=o;save();primed=false;render();update();$q('bkmsg').textContent='Restored.'}catch(x){$q('bkmsg').textContent='That code did not work. Check you copied all of it.'}}
   if(id==='tapuse'){const v=parseInt($q('tapv').textContent);if(v){setBpm(v);goTab('met')}}
 });
-window.Game={update,compute};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-hero]');if(b)Hero.open(b.dataset.hero)});
+window.Game={songInfo:k=>{const s=SONGS.find(x=>x.k===k);return s?{f:s.f+' · '+Hero.defs[k].bpm+' BPM',m:s.m}:null},update,compute};
 update();
 })();
