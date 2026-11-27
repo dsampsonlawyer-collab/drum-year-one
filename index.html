@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14110f">
+<title>Drum Year One</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Drum Year One">
+<style>
+:root{--bg:#f6f2ec;--card:#fff;--ink:#1d1a17;--mute:#6f675f;--line:#e4dccf;--acc:#d6481f;--acc2:#fbe3da;--ok:#2f7d4f;--ok2:#dff1e5}
+@media (prefers-color-scheme:dark){:root{--bg:#14110f;--card:#1e1a17;--ink:#f1ebe3;--mute:#a1978c;--line:#332c26;--acc:#ff7a4d;--acc2:#3a231a;--ok:#6cd093;--ok2:#17301f}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,system-ui,Segoe UI,Roboto,sans-serif}
+body{padding:calc(env(safe-area-inset-top) + 8px) 0 calc(env(safe-area-inset-bottom) + 76px)}
+header{padding:12px 16px 8px}
+h1{margin:0;font-size:24px;letter-spacing:-.02em}
+.sub{color:var(--mute);font-size:14px;margin-top:2px}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--acc);width:0;transition:width .3s}
+main{padding:0 12px;max-width:640px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;margin:10px 0;overflow:hidden}
+.now{background:var(--acc2);border-color:transparent;padding:14px 16px}
+.now b{display:block;font-size:13px;color:var(--acc);text-transform:uppercase;letter-spacing:.06em}
+.now p{margin:6px 0 0}
+.qh{margin:22px 4px 4px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+details>summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;gap:10px;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+.sum{flex:1;min-width:0}
+.sum strong{display:block;font-size:16px}
+.sum span{font-size:13px;color:var(--mute)}
+.pill{font-size:12px;border-radius:99px;padding:3px 9px;background:var(--line);color:var(--mute);white-space:nowrap}
+.pill.ok{background:var(--ok2);color:var(--ok)}
+.chev{transition:transform .2s;color:var(--mute)}
+details[open] .chev{transform:rotate(90deg)}
+.body{padding:0 16px 14px;border-top:1px solid var(--line)}
+.wk{margin-top:14px}
+.wk h4{margin:0 0 4px;font-size:14px}
+.row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line);font-size:15px}
+.row:first-of-type{border-top:0}
+.row input{margin-top:3px;width:22px;height:22px;accent-color:var(--acc);flex:none}
+.row em{font-style:normal;font-weight:600;font-size:12px;color:var(--mute);display:block;text-transform:uppercase;letter-spacing:.05em}
+.row.done span{color:var(--mute);text-decoration:line-through}
+.test{margin-top:16px;background:var(--bg);border-radius:12px;padding:10px 12px}
+.test h4{margin:0 0 4px;font-size:14px;color:var(--acc)}
+.test .row{border:0;padding:5px 0}
+.test small{color:var(--mute);display:block;margin-top:6px}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;border:0;background:none;color:var(--mute);padding:12px 4px;font:600 13px inherit;font-family:inherit}
+nav button.on{color:var(--acc)}
+.view{display:none}.view.on{display:block}
+.met{text-align:center;padding:24px 16px}
+.bpm{font-size:72px;font-weight:700;letter-spacing:-.04em;line-height:1}
+.dots{display:flex;gap:10px;justify-content:center;margin:16px 0}
+.dots i{width:18px;height:18px;border-radius:50%;background:var(--line)}
+.dots i.hit{background:var(--acc)}
+.dots i.hit.first{background:var(--ink)}
+.met input[type=range]{width:100%;accent-color:var(--acc);margin:14px 0}
+.btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px 16px;font:600 16px inherit;font-family:inherit;min-width:56px}
+.btn.go{background:var(--acc);border-color:var(--acc);color:#fff;min-width:140px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.stat b{font-size:28px;display:block}
+.stat span{font-size:13px;color:var(--mute)}
+.reset{margin:24px 0;text-align:center}
+.reset button{background:none;border:0;color:var(--mute);text-decoration:underline;font:inherit}
+.conf{display:none;margin-top:10px;font-size:14px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin:0 -4px;scroll-snap-type:x proximity}
+.chips button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:7px 12px;font:600 13px inherit;font-family:inherit;white-space:nowrap}
+.chips button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.chips i{font-style:normal;opacity:.75;margin-left:4px}
+.stk{display:flex;flex-wrap:wrap;gap:6px}
+.tk{min-width:34px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;border:2px solid var(--line);position:relative}
+.tk sup{font-size:11px;position:absolute;top:2px;left:4px;opacity:.7}
+.tk.rh{color:var(--acc)}.tk.lh{color:var(--ink)}
+.tk.tap{font-size:14px;opacity:.7;height:36px;align-self:center}
+.tk.rest{color:var(--mute);border-style:dashed}
+.tk.now{background:var(--acc2);border-color:var(--acc)}
+.rb{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.rbpm b{font-size:32px}
+.how{margin:0 0 12px;padding-left:20px;font-size:14px;color:var(--mute)}
+.filebtn{display:inline-block;cursor:pointer}
+.dots2{display:flex;flex-wrap:wrap;gap:4px;margin:12px 0 4px}
+.dt{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.dt.g{background:var(--ok)}.dt.a{background:#d9a21a}.dt.r{background:#c93c3c}
+.bad{color:#c93c3c}
+.recbox{margin-bottom:4px}
+.lvl{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:10px 0 6px}
+.lvl i{display:block;height:100%;width:0;background:var(--ok);transition:width .06s}
+.chk{display:flex;gap:8px;align-items:flex-start;margin-top:6px}
+#rres p{margin:8px 0;font-size:15px}
+.lr{border-top:1px solid var(--line)}
+.lr:first-of-type{border-top:0}
+.lr .row{border:0}
+.test .lr{border:0}
+.vbtn{margin:0 0 8px 32px;border:1px solid var(--line);background:none;color:var(--acc);border-radius:99px;padding:5px 12px;font:600 13px inherit;font-family:inherit}
+.ls{margin:0 0 10px 32px;padding:12px;background:var(--bg);border-radius:12px;font-size:14px}
+.ls .goal{font-weight:600;margin:0 0 8px}
+.ls ol{margin:0 0 8px;padding-left:20px}
+.ls li{margin:0 0 8px;white-space:pre-wrap}
+.ls code{display:block;font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 8px;margin:6px 0;white-space:pre;overflow-x:auto}
+.ls .hw{color:var(--mute);border-top:1px solid var(--line);padding-top:8px}
+.ls .hw b{color:var(--ink)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Drum Year One</h1>
+  <div class="sub" id="sub"></div>
+  <div class="bar"><i id="pb"></i></div>
+</header>
+<main>
+  <section class="view on" id="v-plan"><div id="now"></div><div id="plan"></div></section>
+  <section class="view" id="v-rud">
+    <div class="card" style="padding:14px 16px">
+      <div class="chips" id="rchips"></div>
+      <h3 id="rname" style="margin:12px 0 6px;font-size:20px"></h3>
+      <div class="stk" id="stk"></div>
+      <p class="sub" id="rtip" style="margin:8px 0 12px"></p>
+      <div class="rb"><button class="btn" data-rd="-5">-5</button><div class="rbpm"><b id="rbpm">60</b> BPM</div><button class="btn" data-rd="5">+5</button></div>
+      <input type="range" id="rslider" min="30" max="140" value="60" style="width:100%;accent-color:var(--acc)" aria-label="Tempo">
+      <div class="btns" style="margin-top:10px"><button class="btn go" id="rhear" style="min-width:120px">Hear it</button><button class="btn" id="ralong">Play along</button></div>
+      <p class="sub" style="margin-top:10px">Start slow. Hear it plays the rudiment with the click. Play along gives you only the click: it counts you in, then loops.</p>
+    </div>
+    <div class="card" style="padding:14px 16px">
+      <h3 style="margin:0 0 6px;font-size:18px">Check my playing</h3>
+      <ol class="how"><li>Practise with Play along until it feels steady.</li><li>Tap Record and score and play 20-30 seconds at the same tempo. Keep the phone close to the pad and play 4 or more repeats.</li><li>Tap Stop and score to see your results.</li></ol>
+      <div class="recbox"><button class="btn go" id="rrec" style="min-width:170px">Record and score</button><div class="lvl"><i id="rlvl"></i></div><div class="sub" id="rmsg"></div>
+      <label class="sub chk"><input type="checkbox" id="rclick"> Play the click while I record (headphones only, or the click is picked up as hits)</label></div>
+      <p class="sub" style="margin:12px 0 8px">Or score a recording you already made (voice memo or video):</p>
+      <label class="btn go filebtn">Choose recording<input type="file" id="rfile" accept="audio/*,video/*" hidden></label>
+      <div id="rres"></div>
+      <p class="sub" style="margin-top:10px">This is an estimate from the sound only. It measures spacing, tempo, hand loudness and accents. It cannot tell which hand played a note.</p>
+    </div>
+  </section>
+  <section class="view" id="v-met">
+    <div class="card met">
+      <div class="bpm" id="bpm">80</div>
+      <div class="sub">beats per minute</div>
+      <div class="dots" id="dots"></div>
+      <input type="range" id="slider" min="40" max="200" value="80" aria-label="Tempo">
+      <div class="btns">
+        <button class="btn" data-d="-5">-5</button><button class="btn" data-d="-1">-1</button>
+        <button class="btn go" id="go">Start</button>
+        <button class="btn" data-d="1">+1</button><button class="btn" data-d="5">+5</button>
+      </div>
+      <div class="btns" style="margin-top:14px">
+        <button class="btn" data-b="3">3</button><button class="btn" data-b="4">4</button><button class="btn" data-b="6">6</button>
+      </div>
+      <div class="sub" style="margin-top:6px">beats per bar</div>
+    </div>
+    <div class="sub" style="padding:0 6px">Start slow. Test tempos in the plan are targets: reach them in small steps.</div>
+  </section>
+  <section class="view" id="v-prog"><div class="stats" id="stats"></div><div id="tests"></div>
+    <div class="reset"><button id="resetBtn">Reset all progress</button>
+      <div class="conf" id="conf">This clears every tick. <button id="yes" class="btn">Yes, reset</button> <button id="no" class="btn">Cancel</button></div></div>
+  </section>
+</main>
+<nav>
+  <button class="on" data-v="plan">Plan</button>
+  <button data-v="rud">Rudiments</button>
+  <button data-v="met">Metronome</button>
+  <button data-v="prog">Progress</button>
+</nav>
+<script src="l1.js"></script>
+<script src="l1b.js"></script>
+<script src="l2.js"></script>
+<script src="l2b.js"></script>
+<script src="l3.js"></script>
+<script src="l3b.js"></script>
+<script src="l4.js"></script>
+<script src="l4b.js"></script>
+<script>
+const M=(n,title,s,e,wk,test)=>({t:'m',n,title,s,e,wk,test});
+const R=(w,title,l,exam)=>({t:'r',w,title,l,exam});
+const PLAN=[
+{q:'Quarter 1: Foundations',items:[
+M(1,'Setup, grip and steady time',1,4,[
+['Posture, throne height, matched grip, stick control','Kit tour: kick, snare, hi-hat, toms, cymbals. Hit each with a steady pulse','Clap and count along to a click at 60 BPM'],
+['Single strokes on the pad (RLRL), 60-80 BPM','Quarter notes on hi-hat, snare on 2 and 4','Play quarter notes over a slow track'],
+['Rest strokes, relaxed rebound, leading with each hand','Add kick on beat 1: first three-limb beat, very slow','Count out loud while playing'],
+['Note values: whole, half, quarter, eighth','Kick and snare patterns from simple notation','Mini-check, then Milestone 1 test']],
+['Single strokes, 8 clean bars at 80 BPM, relaxed grip','Quarter-note hi-hat, snare on 2 and 4, kick on 1, 16 bars at 70 BPM without stopping','Name and clap whole, half, quarter and eighth notes','Stretch: count aloud while playing the beat']),
+M(2,'First rock beat and rudiments',5,8,[
+['Double strokes (RRLL) and the double-stroke roll, slow','Eighth-note hi-hat, kick 1 and 3, snare 2 and 4: the classic rock beat','Play the beat for a full song section'],
+['Sticking with accents, 8 bars loud and soft','Kick variations on beat 3 and the "and" of 3','Match the feel of 2-3 simple rock songs'],
+['Reading eighth-note patterns, bars of 4/4','Play from a written one-bar groove','Loop a groove for 2 minutes without drifting'],
+['Paradiddle (RLRR LRLL), slow','Consolidate: beat plus rudiments','Mini-check, then Milestone 2 test']],
+['Classic eighth-note rock beat, 2 minutes nonstop at 85 BPM','Single strokes, double strokes and paradiddles, each 8 bars at 70 BPM','Read and play a written one-bar groove cold','Stretch: play along to a song for a full verse']),
+M(3,'Variations and first fills',9,12,[
+['Flam, flam tap, speed up gradually','Crash on beat 1 of a new section, fill-in-and-out','Count a 4-bar phrase, crash on the "one"'],
+['Eighth-note sticking around the toms','First fill: snare and tom eighth notes on beat 4','Beat for 3 bars, fill on bar 4'],
+['Rudiment review, 3 rudiments back-to-back','Four-bar and eight-bar phrases with fills','Play a verse-chorus structure'],
+['Note and rest reading (including rests)','Beat with ride cymbal instead of hi-hat','Mini-check, then Milestone 3 test']],
+['Eight-bar loop at 90 BPM, fill in bars 4 and 8, landing on a crash with no timing loss','Write out a one-bar rhythm you hear clapped (ear check)','Flam and paradiddle at 70 BPM, 8 bars each','Stretch: two different fills in the same 8 bars']),
+R(13,'Quarter 1 review and exam',['Retest any missed milestone items','Record a one-minute video of your best groove and fills','Quarter 1 exam'],'Exam: any rock beat from milestones 2 or 3 for 2 minutes at 90 BPM, one rudiment of the examiner\'s choice, and name five note values aloud')]},
+{q:'Quarter 2: Grooves and fills',items:[
+M(4,'Kick patterns and open hi-hat',14,17,[
+['Eighth-note rests, syncopation clapping','Kick on "and of 2" and "and of 3" with steady hi-hat','Play 4 syncopated bass patterns in a row'],
+['Foot technique: heel down vs heel up, controlled kick strokes','Kick-snare coordination exercises, 8 patterns','Choose one pattern per song section'],
+['Reading kick patterns from notation','Open hi-hat on the "and" with foot or stick','Rock beat with open hi-hat accents'],
+['Review rudiments (single, double, paradiddle, flam)','Four grooves, 4 bars each, no stopping between','Mini-check, then Milestone 4 test']],
+['Four kick patterns over steady hi-hat, 4 bars each at 90 BPM, chained without stopping','One groove with open hi-hat on the "and" of 4','Read a new kick pattern and play it on the first or second try','Stretch: the four patterns at 100 BPM']),
+M(5,'Sixteenth notes and more rudiments',18,21,[
+['Sixteenth-note singles, 60-80 BPM, counting 1 e & a','Sixteenth-note rhythms on the snare only, slow, before adding the hi-hat','Count aloud with a track'],
+['Sixteenth-note paradiddles, accent the "1"','Kick and snare at half speed with sixteenth hi-hat, slow','Play a verse with sixteenth hi-hat'],
+['Double-stroke roll: open to closed, 8 bars','Sixteenth-note fills between snare and toms','Fill into every fourth bar'],
+['Flam, flam tap, drag intro','Sixteenth beat at 70 BPM, 1 minute','Mini-check, then Milestone 5 test']],
+['Sixteenth-note singles, 8 bars at 80 BPM','Sixteenth-note hi-hat groove, 1 minute at 70 BPM','Paradiddle with accents, 8 bars at 90 BPM','Read a one-bar sixteenth-note pattern cold','Stretch: double-stroke roll at 80 BPM']),
+M(6,'Fills, song form and first full songs',22,25,[
+['Triplet sticking, 12 bars at 70 BPM','Tom fills around the kit: high to low','Verse and chorus play-along'],
+['Linking rudiments into fills','Two-bar and four-bar fill ideas','Build a fill for each song transition'],
+['Reading a basic chart: intro, verse, chorus, bridge','Play a full simple song from a chart','Learn the song\'s drum part'],
+['Stamina: 5-minute continuous workout','Play two songs back to back','Mini-check, then Milestone 6 test']],
+['Play one full song (3-4 minutes) with the original track, sections correct, no stops','Three fills, each landing on a crash on beat 1','Read and play a chart you have not seen','Stretch: add one fill of your own']),
+R(26,'Quarter 2 review and exam',['Retest missed items','Rehearse two songs','Quarter 2 exam'],'Exam: two songs from milestone 6, chain four grooves from milestone 4, and 8 bars of sixteenth paradiddles at 90 BPM')]},
+{q:'Quarter 3: Styles and independence',items:[
+M(7,'Ghost notes and the ride cymbal',27,30,[
+['Ghost notes: soft taps vs accents, height control','Rock beat with one ghost note before beat 2','Add ghost notes to a play-along'],
+['Accent patterns on the pad, 8 bars loud-soft','Ghost notes in a sixteenth groove, slow','Keep ghosts quiet, backbeat loud'],
+['Ride cymbal technique: tip, bell, shoulder','Rock beat on ride, kick and snare unchanged','Switch hi-hat to ride at the chorus'],
+['Rudiment review at higher tempo','Four-bar groove cycle with hi-hat and ride','Mini-check, then Milestone 7 test']],
+['Groove with ghost notes, 2 minutes at 80 BPM, ghosts clearly softer than backbeats','Eighth-note ride groove, 2 minutes at 100 BPM','Record the test and name two timing flaws yourself','Stretch: ghost notes plus kick variations']),
+M(8,'Funk, blues shuffle and half-time',31,34,[
+['Triplet feel: swing note pairs on the pad','Shuffle beat, hi-hat or ride, 70-90 BPM','Play a 12-bar blues'],
+['Dotted rhythms, swing vs straight','Shuffle with ghost notes on snare','Song in 12/8 or shuffle feel'],
+['Sixteenth syncopation','Simple funk groove, kick patterns of your choice','Funk play-along, tight and short'],
+['Half-time feel concept','Half-time groove: snare on 3, with fill ideas','Mini-check, then Milestone 8 test']],
+['Shuffle, 12 bars at 80 BPM, swung not straight','Funk groove, 2 minutes at 90 BPM, at least one ghost note per bar','Half-time groove for 8 bars, then switch to normal time cleanly','Identify shuffle, funk and half-time by ear (3 of 3 clips)','Stretch: add a fill in each style']),
+M(9,'Independence and hi-hat foot',35,38,[
+['Hi-hat foot: chick on 2 and 4, then every beat','Hands play a groove while the foot keeps time','Keep foot steady through a fill'],
+['Hand independence: right hand ostinato with left hand variations','Ride ostinato with snare variations, 8 patterns','Switch ostinato each section'],
+['Feet independence: kick patterns against the hi-hat foot','Combine hands and feet, slow','Play-along with a bridge in a new feel'],
+['Review: all four limbs','Two-bar looped groove, no stops','Mini-check, then Milestone 9 test']],
+['Hi-hat foot on 2 and 4 during a rock beat, 2 minutes at 90 BPM','Ride ostinato with 4 different snare patterns, 2 bars each at 80 BPM','Keep the foot going through a fill without dropping','Stretch: foot plays every quarter note during the fill']),
+R(39,'Quarter 3 review and exam',['Retest missed items','Prepare three style demos (shuffle, funk, half-time)','Quarter 3 exam'],'Exam: three styles of 1 minute each from a track, one hi-hat foot groove, and a two-bar independence pattern chosen on the spot')]},
+{q:'Quarter 4: Musicianship and performance',items:[
+M(10,'Dynamics, triplets and odd feels',40,43,[
+['Dynamics: pp, mp, mf, f on the pad, stick heights','Groove played quiet, medium, loud with no tempo change','Build a song section from soft to loud'],
+['Triplet rolls and fills','Triplet fill around the toms','Use a triplet fill into the chorus'],
+['Counting 6/8 and 3/4','6/8 groove, then 3/4 groove','Play a waltz or ballad'],
+['Rudiment review with dynamics','Chain: 4/4 rock, shuffle, 6/8, 3/4','Mini-check, then Milestone 10 test']],
+['One groove, 8 bars each at quiet, medium and loud, steady tempo','6/8 groove, 2 minutes at 70 BPM (dotted quarter)','3/4 groove, 2 minutes at 90 BPM','Triplet fill landing on beat 1','Stretch: crescendo across 16 bars']),
+M(11,'Reading, ear and playing without a click',44,47,[
+['Sight-reading 4-bar patterns with rests and sixteenths','Play charts with repeats and endings','Read a new chart each lesson'],
+['Ear training: hear kick, snare, hi-hat pattern, write it down','Transcribe a simple groove from a song','Play your transcription'],
+['Keep tempo without a click: click drops out every 4 bars','Groove with click muted, check against it','Play a full song without click'],
+['Tempo changes: speed up and slow down on cue','Review all styles','Mini-check, then Milestone 11 test']],
+['Sight-read a new 8-bar chart at 90 BPM, max 2 stumbles','Transcribe a 2-bar groove by ear (hear it twice) and play it back correctly','Play a groove 2 minutes at 100 BPM with click muted after bar 4, then check drift (within 5 BPM)','Stretch: fill by ear']),
+M(12,'Set list and performance skills',48,51,[
+['Design a 5-minute warm-up routine','Choose and learn 5 songs, mixed feels','Learn the set list\'s first two songs'],
+['Endurance: full-set run-through','Songs 3 and 4','Transitions and count-ins between songs'],
+['Mental skills: breathing, recovering from mistakes','Song 5, then full set','Record a dress rehearsal'],
+['Review the recording, fix three problems','Full set, no stops','Mini-check, then Milestone 12 test']],
+['Full 5-song set, about 15 minutes, no stopping, count-ins clean','Recover from a deliberate mistake without losing the beat','5-minute warm-up routine from memory','Stretch: perform the set for a friend or family member']),
+R(52,'Final recital and year-end exam',['Warm up and quick check of rudiments at target tempos','Final rehearsal, soundcheck, set the kit up as for a gig','Recital'],'Recital: perform the 5-song set for an audience, then one groove from each style (rock, funk, shuffle, half-time, 6/8) on request. Afterwards compare the video with your week 4 test.')]}
+];
+const KEY='drumYearOne.v1';
+let S={d:{},started:null};
+try{const x=JSON.parse(localStorage.getItem(KEY)||'null');if(x&&x.d)S=x}catch(e){}
+if(!S.started)S.started=new Date().toISOString().slice(0,10);
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const $=id=>document.getElementById(id);
+const L='ABC';
+function lessonIds(it){const ids=[];if(it.t==='m'){for(let w=it.s;w<=it.e;w++)for(let i=0;i<3;i++)ids.push(w+L[i])}else for(let i=0;i<3;i++)ids.push(it.w+L[i]);return ids}
+function testIds(it){return it.t==='m'?it.test.map((_,i)=>'t'+it.n+'_'+i):['x'+it.w]}
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+const ALL=PLAN.flatMap(p=>p.items);
+function status(it){const l=lessonIds(it),t=testIds(it);const dl=l.filter(i=>S.d[i]).length;const must=it.t==='m'?t.filter((_,i)=>!/^Stretch/.test(it.test[i])):t;const dt=must.filter(i=>S.d[i]).length;return{dl,tl:l.length,dt,tt:must.length,done:dl===l.length&&dt===must.length}}
+function curItem(){return ALL.find(it=>!status(it).done)}
+const OPEN=new Set();
+function fmt(t){return esc(t).replace(/`([^`]+)`/g,'<code>$1</code>')}
+function lessonHtml(l){return `<div class="ls"><p class="goal">${esc(l.g)}</p><ol>${l.s.map(x=>`<li>${fmt(x)}</li>`).join('')}</ol><div class="hw"><b>Practice this week:</b> ${fmt(l.h)}</div></div>`}
+function row(id,label,text){const d=!!S.d[id];const les=window.LESSONS&&LESSONS[id];const op=OPEN.has(id);return `<div class="lr"><label class="row${d?' done':''}"><input type="checkbox" data-id="${id}"${d?' checked':''}><div>${label?`<em>${label}</em>`:''}<span>${esc(text)}</span></div></label>${les?`<button class="vbtn" data-vl="${id}">${op?'Hide lesson':'View lesson'}</button>`:''}${les&&op?lessonHtml(les):''}</div>`}
+function weekBlock(w,a){return `<div class="wk"><h4>Week ${w}</h4>${row(w+'A','A: Technique',a[0])}${row(w+'B','B: Kit',a[1])}${row(w+'C','C: Play-along',a[2])}</div>`}
+function render(){
+  const cur=curItem();
+  let html='';
+  PLAN.forEach(p=>{
+    html+=`<div class="qh">${esc(p.q)}</div>`;
+    p.items.forEach(it=>{
+      const st=status(it);
+      const isCur=cur===it;
+      let body='';
+      if(it.t==='m'){
+        for(let w=it.s;w<=it.e;w++)body+=weekBlock(w,it.wk[w-it.s]);
+        body+=`<div class="test"><h4>Milestone ${it.n} test</h4>${it.test.map((x,i)=>row('t'+it.n+'_'+i,'',x)).join('')}<small>Pass every item except the stretch goal, then tick the milestone off. Film it.</small></div>`;
+      }else{
+        body+=`<div class="wk"><h4>Week ${it.w}</h4>${it.l.map((x,i)=>row(it.w+L[i],'Lesson '+L[i],x)).join('')}</div><div class="test"><h4>${esc(it.exam.split(':')[0])}</h4>${row('x'+it.w,'',it.exam.split(': ').slice(1).join(': '))}</div>`;
+      }
+      const title=it.t==='m'?`M${it.n}: ${it.title}`:it.title;
+      const wks=it.t==='m'?`Weeks ${it.s}-${it.e}`:`Week ${it.w}`;
+      html+=`<details class="card" data-k="${it.t}${it.n||it.w}"${isCur?' open':''}><summary><div class="sum"><strong>${esc(title)}</strong><span>${wks} · ${st.dl}/${st.tl} lessons</span></div><span class="pill${st.done?' ok':''}">${st.done?'Passed':'Test '+st.dt+'/'+st.tt}</span><span class="chev">›</span></summary><div class="body">${body}</div></details>`;
+    });
+  });
+  const keep={};document.querySelectorAll('#plan details').forEach(d=>keep[d.dataset.k]=d.open);
+  $('plan').innerHTML=html;
+  document.querySelectorAll('#plan details').forEach(d=>{if(d.dataset.k in keep)d.open=keep[d.dataset.k]});
+  // header & now
+  const total=156,done=Object.keys(S.d).filter(k=>/^\d+[ABC]$/.test(k)&&S.d[k]).length;
+  const pct=Math.round(done/total*100);
+  $('pb').style.width=pct+'%';
+  $('sub').textContent=pct+'% done · '+done+' of '+total+' lessons';
+  if(cur){
+    const w=cur.t==='m'?[...Array(cur.e-cur.s+1)].map((_,i)=>cur.s+i).find(w=>L.split('').some(c=>!S.d[w+c])):cur.w;
+    const ids=w?L.split('').filter(c=>!S.d[w+c]):[];
+    let txt;
+    if(w&&ids.length){const li=L.indexOf(ids[0]);const lesson=cur.t==='m'?cur.wk[w-cur.s][li]:cur.l[li];txt=`Lesson ${ids[0]}: ${lesson}`}
+    else txt=cur.t==='m'?`All lessons done. Take the Milestone ${cur.n} test.`:'All lessons done. Take the exam.';
+    $('now').innerHTML=`<div class="card now"><b>Up next${w?' · Week '+w:''}</b><p>${esc(txt)}</p></div>`;
+  }else $('now').innerHTML=`<div class="card now"><b>Year complete</b><p>You finished the program. Compare your recital video with week 4 and set goals for year two.</p></div>`;
+  // progress view
+  const m=ALL.filter(i=>i.t==='m'),mp=m.filter(i=>status(i).done).length;
+  const tests=ALL.filter(i=>status(i).done).length;
+  const wk=cur?(cur.t==='m'?cur.s:cur.w):52;
+  $('stats').innerHTML=`<div class="stat"><b>${pct}%</b><span>Lessons done</span></div><div class="stat"><b>${tests}/${ALL.length}</b><span>Milestones and exams passed</span></div><div class="stat"><b>${done}</b><span>Lessons completed</span></div><div class="stat"><b>Week ${wk}</b><span>Current block starts</span></div>`;
+  $('tests').innerHTML=ALL.map(it=>{const st=status(it);return `<div class="card"><div class="sum" style="padding:12px 16px"><strong>${esc(it.t==='m'?'M'+it.n+': '+it.title:it.title)}</strong><span>${it.t==='m'?'Weeks '+it.s+'-'+it.e:'Week '+it.w} · ${st.done?'Passed':st.dl+'/'+st.tl+' lessons, test '+st.dt+'/'+st.tt}</span></div></div>`}).join('');
+}
+document.addEventListener('change',e=>{const id=e.target.dataset&&e.target.dataset.id;if(!id)return;if(e.target.checked)S.d[id]=1;else delete S.d[id];save();render()});
+document.addEventListener('click',e=>{const id=e.target.dataset&&e.target.dataset.vl;if(!id)return;if(OPEN.has(id))OPEN.delete(id);else OPEN.add(id);render()});
+// tabs
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v))});
+// reset
+$('resetBtn').onclick=()=>$('conf').style.display='block';
+$('no').onclick=()=>$('conf').style.display='none';
+$('yes').onclick=()=>{S={d:{},started:new Date().toISOString().slice(0,10)};save();$('conf').style.display='none';render()};
+// metronome
+let bpm=80,beats=4,run=false,ac,next=0,beat=0,timer;
+function dots(){$('dots').innerHTML=[...Array(beats)].map((_,i)=>`<i class="${i===0?'first':''}" data-i="${i}"></i>`).join('')}
+function setBpm(v){bpm=Math.max(40,Math.min(200,v));$('bpm').textContent=bpm;$('slider').value=bpm}
+function click(t,acc){const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=acc?1500:1000;g.gain.setValueAtTime(.6,t);g.gain.exponentialRampToValueAtTime(.001,t+.05);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.06)}
+function sched(){while(next<ac.currentTime+.12){const b=beat%beats;click(next,b===0);const dl=(next-ac.currentTime)*1000;setTimeout(()=>{document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('hit',i===b))},Math.max(0,dl));next+=60/bpm;beat++}timer=setTimeout(sched,25)}
+$('go').onclick=()=>{
+  if(run){run=false;clearTimeout(timer);$('go').textContent='Start';document.querySelectorAll('#dots i').forEach(d=>d.classList.remove('hit'));return}
+  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume()}catch(e){return}
+  run=true;beat=0;next=ac.currentTime+.05;$('go').textContent='Stop';sched()};
+$('slider').oninput=e=>setBpm(+e.target.value);
+document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>setBpm(bpm+ +b.dataset.d));
+document.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{beats=+b.dataset.b;beat=0;dots()});
+dots();render();
+</script>
+<script src="rud.js"></script>
+<script>if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){})}</script>
+</body>
+</html>

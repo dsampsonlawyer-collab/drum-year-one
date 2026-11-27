@@ -1,0 +1,222 @@
+(function(){
+const D=(g,s,h)=>({g,s,h});
+const E='`1 & 2 & 3 & 4 &`',S16='`1 e & a 2 e & a 3 e & a 4 e & a`';
+Object.assign(window.LESSONS,{
+'14A':D('Feel and clap off-beat (syncopated) rhythms before playing them.',[
+'5 min warm-up: clap eighth notes ' + E + ' at 70 BPM, stepping your foot on each number.',
+'10 min: clap only the "ands" (the notes between the numbers) for 8 bars while your foot keeps the beat. This is syncopation.',
+'10 min: clap these (x = clap, . = rest):\n`1 & 2 & 3 & 4 &\nx . . x . x . .\nx . x . . x x .`\nSay the counts out loud first.',
+'5 min: play both patterns on the pad at 70 BPM, 4 bars each.'],
+'10 min a day: step the beat with your foot while clapping the "ands". It should feel easy by Friday.'),
+'14B':D('Place the kick on the "and of 2" and "and of 3" under a steady hi-hat.',[
+'5 min warm-up: rock beat at 80 BPM, 16 bars.',
+'10 min: kick on 1 and the "and" of 2:\n`1 & 2 & 3 & 4 &\nHH x x x x x x x x\nSN . . o . . . o .\nKK o . . o . . . .`\nPlay 4 bars at 60 BPM, then 70 BPM.',
+'10 min: kick on 1, 3 and the "and" of 3. Slow, 4 bars, then 70 BPM.',
+'10 min: alternate the two patterns, 2 bars each, hi-hat and snare staying the same.'],
+'10 min a day: both patterns at 70 BPM, 2 min each. Hi-hat should not change volume when the kick moves.'),
+'14C':D('Chain four different bass drum patterns without stopping.',[
+'6 min warm-up: rock beat at 80 BPM.',
+'12 min: learn four patterns (kick positions, count ' + E + '): A) 1, 3  B) 1, "and" of 2, 3  C) 1, 3, "and" of 3  D) 1, "and" of 2, "and" of 3. Play each for 2 bars.',
+'12 min: chain A B C D, 2 bars each, at 70 BPM. Repeat 4 times.',
+'5 min: choose your favorite and play it for 16 bars.'],
+'10 min a day: A-B-C-D chain at 70 BPM, 4 rounds. Write the patterns in your notebook.'),
+'15A':D('Control the kick pedal with two foot techniques.',[
+'5 min warm-up: kick quarter notes at 60 BPM, heel down.',
+'10 min heel-down: pivot from the ankle, play eighth notes at 60 BPM for 8 bars. Stop if your shin tires.',
+'10 min heel-up: lift the whole leg, play quarter notes at 60 BPM for 8 bars. This gives a louder note.',
+'8 min: play a rock beat using heel-down, then heel-up. Hear the difference.'],
+'10 min a day: 3 min heel-down eighths at 60 BPM, 3 min heel-up quarters, 4 min beat. Keep your upper body relaxed.'),
+'15B':D('Coordinate the kick and snare in eight patterns.',[
+'5 min warm-up: rock beat at 80 BPM.',
+'12 min: eight kick-and-snare patterns on the same hi-hat; for each, say the count then play 4 bars at 60 BPM. Use patterns that move the kick by one position, e.g. kick on "and" of 1, "a" of 2, and so on.',
+'10 min: add a snare on the "and" of 4 in 2 of the patterns.',
+'8 min: play the three you find hardest.'],
+'10 min a day: pick three patterns, 4 bars each at 60 BPM. Never exceed what you can play cleanly.'),
+'15C':D('Choose a different kick pattern for each part of a song.',[
+'8 min warm-up: A-B-C-D chain at 70 BPM.',
+'15 min: play along with a song. Verse: kick pattern A. Chorus: pattern B or C.',
+'10 min: try changing the pattern in the bridge.',
+'5 min: record and listen for where the groove tightens or loosens.'],
+'Play along with 2 songs a day. Choose a different pattern for each section and log which you used.'),
+'16A':D('Read kick patterns from written notation.',[
+'5 min warm-up: clap ' + E + ' at 70 BPM.',
+'10 min: read these kick lines, clap them then play them on the kick drum:\n`1 & 2 & 3 & 4 &\nKK o . . . o . . .\nKK o . . o . o . .\nKK o . o . . o . .`',
+'10 min: play each with hi-hat and snare for 4 bars at 70 BPM.',
+'8 min: read a new line cold, no practice first.'],
+'10 min a day: read two new kick lines and play them. Ask your teacher for more, or write your own.'),
+'16B':D('Add open hi-hat accents to the rock beat.',[
+'5 min warm-up: rock beat at 80 BPM.',
+'10 min: to open the hi-hat, lift your foot slightly as you hit; close on the next beat with the foot. Practice: closed, closed, open on the "and" of 4, closed on 1.',
+'12 min: play\n`1 & 2 & 3 & 4 &\nHH x x x x x x x O\nSN . . o . . . o .\nKK o . . . o . . .`\n4 bars at 60 BPM, then 70 BPM. O = open hi-hat.',
+'8 min: try the open hi-hat on the "and" of 2 as well.'],
+'10 min a day: open hi-hat on the "and" of 4, 8 bars at 70 BPM, 5 rounds. Close the hat cleanly on 1.'),
+'16C':D('Use open hi-hat accents in a song.',[
+'8 min warm-up: open hi-hat beat at 80 BPM.',
+'15 min: play over a song that has an open hi-hat sound. Match the placement.',
+'10 min: use the open hat to lead into the chorus.',
+'5 min: replay your best take.'],
+'Listen to 3 songs and notice where the hi-hat opens. Try to copy it in one.'),
+'17A':D('Review singles, doubles, paradiddles and flams for the test.',[
+'5 min warm-up: singles at 80 BPM.',
+'15 min: run each rudiment at 70 BPM for 8 bars, then 80 BPM. Record yourself.',
+'10 min: fix the one that sounds weakest.',
+'5 min: play all four back to back without stopping.'],
+'10 min a day: weakest rudiment, plus all four in a row at 70 BPM.'),
+'17B':D('Chain four grooves without stopping, as in the test.',[
+'6 min warm-up.',
+'12 min: play A B C D (from 14C) 4 bars each at 90 BPM. Aim for clean transitions.',
+'10 min: add the open hi-hat groove to the end of the chain.',
+'7 min: record and review.'],
+'10 min a day: chain at 90 BPM, 4 rounds. Fix transitions, not speed.'),
+'17C':D('Mini-check, then the Milestone 4 test.',[
+'8 min warm-up and mini-check.',
+'15 min test: (1) four kick patterns, 4 bars each at 90 BPM, chained; (2) one groove with open hi-hat on the "and" of 4; (3) read a new kick pattern.',
+'10 min: watch the video back together.',
+'5 min: plan the retest if needed.'],
+'Practice only the item you missed for 10 min a day. Passed? Enjoy playing a favorite song.'),
+'18A':D('Play even sixteenth notes (4 per beat) on the pad.',[
+'5 min warm-up: eighth notes at 60 BPM.',
+'10 min: count ' + S16 + ' and play four notes to each beat: `R L R L R L R L R L R L R L R L` at 60 BPM, 8 bars.',
+'10 min: play the same at 70 BPM. Accent every 4th note on the numbers.',
+'5 min: eight bars of eighths, eight bars of sixteenths, alternating.'],
+'10 min a day: sixteenths at 60-70 BPM, 2 min on, 1 min off. Count out loud with "1 e & a".'),
+'18B':D('Play simple sixteenth-note rhythms on the snare before adding the hi-hat.',[
+'5 min warm-up: sixteenth singles at 60 BPM.',
+'12 min: read these (count ' + S16 + '):\n`x x x x . . x . x . x x . . . .`\nplay each at 60 BPM, 4 bars.',
+'10 min: play a sixteenth pattern on snare while stepping the beat with your foot.',
+'8 min: add kick on 1 and 3.'],
+'10 min a day: three sixteenth patterns on snare at 60 BPM, then kick on 1 and 3.'),
+'18C':D('Count sixteenths aloud while playing along.',[
+'8 min warm-up: eighth-note hi-hat beat at 80 BPM.',
+'12 min: count "1 e & a" aloud as you tap sixteenths on the hi-hat over a slow song.',
+'10 min: play just the first bar of each phrase in sixteenths, rest eighths.',
+'5 min: replay.'],
+'Count "1 e & a" over 2 songs a day. If you lose count, stop and restart at the next phrase.'),
+'19A':D('Play paradiddles in sixteenth notes with accents.',[
+'5 min warm-up: sixteenth singles at 60 BPM.',
+'12 min: paradiddles in sixteenths, accent on 1: `R L R R  L R L L  R L R R  L R L L` at 60 BPM. Count aloud.',
+'10 min: play at 70 BPM, 8 bars.',
+'5 min: accent two paradiddles then two without.'],
+'10 min a day: sixteenth-note paradiddles at 60-80 BPM, 2 min each.'),
+'19B':D('Play sixteenth-note hi-hat with kick and snare at slow tempo.',[
+'5 min warm-up.',
+'12 min: read the grid:\n`1 e & a 2 e & a 3 e & a 4 e & a\nHH x x x x x x x x x x x x x x x x\nSN . . . . o . . . . . . . o . . .\nKK o . . . . . . . o . . . . . . .`\nPlay at 50 BPM, 4 bars.',
+'12 min: increase to 60, 70 BPM only if relaxed.',
+'6 min: alternate 2 bars of eighths and 2 of sixteenths on the hi-hat.'],
+'10 min a day: sixteenth hi-hat beat at 60 BPM, 8 bars, 5 rounds. Keep the snare louder than the hi-hat.'),
+'19C':D('Play a verse with sixteenth-note hi-hat.',[
+'8 min warm-up: sixteenth hi-hat beat at 60 BPM.',
+'15 min: find a song with a steady 70-80 BPM and try the hi-hat in sixteenths for the verse.',
+'10 min: switch back to eighths for the chorus.',
+'5 min: replay your best take.'],
+'Practice 2 songs daily, choosing which sections get sixteenths.'),
+'20A':D('Play a double-stroke roll from open (slow) to closed (fast).',[
+'5 min warm-up: doubles at 60 BPM.',
+'12 min: play `R R L L R R L L` as eighths at 60 BPM, then sixteenths. The second stroke of each double is a rebound, do not push.',
+'10 min: start slow and gradually squeeze the notes together over 4 bars (open to closed).',
+'5 min: play a roll for 2 beats, then rest 2.'],
+'10 min a day: doubles at 60, 70, 80 BPM for 2 min each. Listen for equal volume in all four notes.'),
+'20B':D('Play sixteenth-note fills between the snare and toms.',[
+'6 min warm-up: sixteenth singles around the kit.',
+'12 min: play the fill `snare x4, tom 1 x4, tom 2 x4, floor x4` as sixteenth notes in bar 4, 60 BPM.',
+'10 min: play 3 bars of beat then this fill. Start slow.',
+'7 min: speed up to 70 BPM.'],
+'10 min a day: 4-bar loop with the sixteenth fill at 60-70 BPM, 10 rounds.'),
+'20C':D('Put a fill in every fourth bar of a song.',[
+'8 min warm-up: 4-bar loop with fill at 70 BPM.',
+'15 min: play over a song and fill every 4th bar.',
+'10 min: fill every 8th bar instead.',
+'5 min: record and listen for any rushing.'],
+'Practice with 2 songs daily; count the bars.'),
+'21A':D('Learn the drag and revisit the flam.',[
+'5 min warm-up: flam taps at 60 BPM.',
+'12 min: a drag is two soft grace notes before the main note. `ll R  rr L` slowly at 60 BPM.',
+'10 min: alternate flams and drags in a measure.',
+'5 min: hear the difference.'],
+'10 min a day: flams and drags at 60 BPM, 3 rounds. Keep the grace notes very soft.'),
+'21B':D('Hold a sixteenth-note beat for a full minute at 70 BPM.',[
+'6 min warm-up.',
+'10 min: set the metronome to 70 BPM. Play the sixteenth hi-hat beat from 19B for 1 minute without stopping.',
+'12 min: repeat three times, resting 30 seconds. Count aloud on one run.',
+'7 min: record and review.'],
+'10 min a day: three 1-minute runs at 70 BPM.'),
+'21C':D('Mini-check, then the Milestone 5 test.',[
+'8 min warm-up and mini-check.',
+'15 min test: (1) sixteenth singles 8 bars at 80 BPM; (2) sixteenth hi-hat groove for 1 minute at 70 BPM; (3) accented paradiddles 8 bars at 90 BPM; (4) read a sixteenth pattern cold.',
+'10 min: review the video.',
+'5 min: plan the retest.'],
+'Practice only the missed item for 10 min a day.'),
+'22A':D('Learn triplet sticking (three notes per beat).',[
+'5 min warm-up: singles at 70 BPM.',
+'12 min: count "1-trip-let 2-trip-let" and play `R L R  L R L` at 60 BPM. The pattern alternates which hand leads.',
+'10 min: accent each first note.',
+'5 min: eight bars of triplets, 70 BPM.'],
+'10 min a day: triplets at 60-70 BPM, 2 min on, 1 off.'),
+'22B':D('Play fills that travel from high toms to low toms.',[
+'6 min warm-up: sixteenth fills.',
+'12 min: play `snare, tom 1, tom 2, floor` one note each on beats 1-4 of a bar, then double up. Say the drum names.',
+'10 min: two-beat fills in the second half of a bar.',
+'7 min: use as a fill every 4 bars.'],
+'10 min a day: tom fills at 60-70 BPM, 10 rounds.'),
+'22C':D('Play a verse and chorus with matching fills.',[
+'8 min warm-up.',
+'15 min: play along to a song, using a tom fill into each chorus.',
+'10 min: vary the fills.',
+'5 min: replay.'],
+'Practice 2 songs daily.'),
+'23A':D('Link rudiments to build fills.',[
+'5 min warm-up.',
+'12 min: play one bar of paradiddles, then one bar of doubles, as a fill on the toms.',
+'10 min: add accents on the crash.',
+'5 min: speed up gradually.'],
+'10 min a day: rudiment fills at 70 BPM.'),
+'23B':D('Build two-bar and four-bar fill ideas.',[
+'6 min warm-up.',
+'12 min: write down a two-bar fill using notes you know.',
+'10 min: play a four-bar fill building from quiet to loud.',
+'7 min: play each in a 8-bar phrase.'],
+'10 min a day: practice your two fills.'),
+'23C':D('Create a fill for each song transition.',[
+'8 min warm-up.',
+'15 min: choose a song and plan a fill before each section.',
+'10 min: play and adjust.',
+'5 min: record.'],
+'Play the song once a day.'),
+'24A':D('Read a basic chart: intro, verse, chorus, bridge.',[
+'5 min: learn the chart symbols: bar lines, repeat signs, section letters.',
+'12 min: follow a sample chart while a track plays, pointing at the bar.',
+'10 min: write your own chart for a song you know.',
+'5 min: compare.'],
+'10 min a day: chart one song.'),
+'24B':D('Play a full simple song from a chart.',[
+'6 min warm-up.',
+'15 min: play from the chart over the track.',
+'10 min: fix trouble spots.',
+'5 min: play once without stopping.'],
+'Play the song daily.'),
+'24C':D('Learn the song\'s drum part.',[
+'8 min warm-up.',
+'15 min: listen and copy the beat and fills.',
+'10 min: play along.',
+'5 min: replay.'],
+'Play the song daily.'),
+'25A':D('Build stamina with a 5-minute continuous workout.',[
+'5 min warm-up.',
+'20 min: play 5 minutes without stopping: beat, fills, crash.',
+'5 min: rest and stretch.'],
+'10 min a day: 5-minute run.'),
+'25B':D('Play two songs back to back.',[
+'8 min warm-up.',
+'20 min: play two songs with a count-in between.',
+'10 min: fix transitions.'],
+'Run both songs daily.'),
+'25C':D('Mini-check, then the Milestone 6 test.',[
+'8 min warm-up and mini-check.',
+'20 min test: (1) a full song with the track; (2) three fills landing on a crash; (3) read and play a new chart.',
+'10 min: review the video.'],
+'Practice missed items.'),
+'26A':D('Retest missed items.',['10 min warm-up.','20 min retest.','10 min review.'],'Practice weak items.'),
+'26B':D('Rehearse two songs.',['10 min warm-up.','25 min rehearse.','5 min review.'],'Practice daily.'),
+'26C':D('Quarter 2 exam.',['10 min warm-up.','25 min exam: two songs from Milestone 6; chain four grooves from Milestone 4; 8 bars of sixteenth paradiddles at 90 BPM.','5 min feedback.'],'Rest, then start Quarter 3.')
+});
+})();
