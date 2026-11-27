@@ -134,7 +134,7 @@ function logPractice(m){const Lg=LOG(),k=dayKey(new Date());Lg[k]=(Lg[k]||0)+m;s
 // tap tempo
 let taps=[];
 function tap(){const n=Date.now();if(taps.length&&n-taps[taps.length-1]>2000)taps=[];taps.push(n);if(taps.length>8)taps.shift();
-  if(taps.length>=3){const iv=[];for(let i=1;i<taps.length;i++)iv.push(taps[i]-taps[i-1]);const a=iv.reduce((x,y)=>x+y,0)/iv.length;$q('tapv').textContent=Math.round(60000/a)+' BPM'}
+  if(taps.length>=3){const iv=[];for(let i=1;i<taps.length;i++)iv.push(taps[i]-taps[i-1]);const a=iv.reduce((x,y)=>x+y,0)/iv.length;$q('tapv').textContent=Math.round(60000/a)+' BPM';$q('tapuse').style.display='inline-block'}
   else $q('tapv').textContent='Keep tapping...'}
 document.addEventListener('click',e=>{
   const t=e.target;
@@ -144,6 +144,23 @@ document.addEventListener('click',e=>{
   if(t.id==='resetBtn')$q('conf').style.display='block';
   if(t.id==='no')$q('conf').style.display='none';
   if(t.id==='yes'){S={d:{},started:new Date().toISOString().slice(0,10)};save();$q('conf').style.display='none';primed=false;render();update()}
+});
+// automatic practice-time tracking: any time the metronome, a track or the rudiment trainer is playing
+let secs=0;
+setInterval(()=>{
+  const on=(typeof run!=='undefined'&&run)||(window.RudActive&&RudActive())||(window.Player&&Player.active&&Player.active());
+  if(!on||document.hidden)return;
+  S.secs=(S.secs||0)+1;
+  if(S.secs>=60){S.secs=0;const Lg=LOG(),k=dayKey(new Date());Lg[k]=(Lg[k]||0)+1;save();update()}
+},1000);
+// back up / restore
+function code(){try{return btoa(unescape(encodeURIComponent(JSON.stringify(S))))}catch(e){return''}}
+document.addEventListener('click',e=>{
+  const id=e.target.id;
+  if(id==='bkshow'){$q('bk').value=code();$q('bkmsg').textContent='Copy this code and keep it somewhere safe.'}
+  if(id==='bkcopy'){const v=$q('bk').value||code();$q('bk').value=v;$q('bk').select();let ok=false;try{if(navigator.clipboard){navigator.clipboard.writeText(v);ok=true}}catch(x){}$q('bkmsg').textContent=ok?'Copied.':'Select the text and copy it.'}
+  if(id==='bkrestore'){try{const o=JSON.parse(decodeURIComponent(escape(atob($q('bk').value.trim()))));if(!o||typeof o.d!=='object')throw 0;S=o;save();primed=false;render();update();$q('bkmsg').textContent='Restored.'}catch(x){$q('bkmsg').textContent='That code did not work. Check you copied all of it.'}}
+  if(id==='tapuse'){const v=parseInt($q('tapv').textContent);if(v){setBpm(v);goTab('met')}}
 });
 window.Game={update,compute};
 update();

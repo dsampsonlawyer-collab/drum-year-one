@@ -181,14 +181,15 @@ nav button.on{color:var(--acc)}
     <div class="card" style="padding:14px 16px"><h3 style="margin:0 0 4px">Log today's practice</h3>
       <div id="plog" class="sub"></div>
       <div class="btns" style="margin:10px 0 4px;justify-content:flex-start"><button class="btn" data-lp="10">+10 min</button><button class="btn" data-lp="15">+15</button><button class="btn" data-lp="20">+20</button><button class="btn" data-lp="30">+30</button></div>
-      <div class="sub">Ten minutes or more counts as a practice day. Short, regular practice beats one long session. Aim for 4 days a week.</div></div>
+      <div class="sub">Time with the metronome, backing tracks and rudiment trainer is counted automatically. Ten minutes or more counts as a practice day. Short, regular practice beats one long session. Aim for 4 days a week.</div></div>
     <div class="card" style="padding:14px 16px"><h3 style="margin:0 0 4px">Tap tempo</h3><div class="sub">Tap along to a song to find its tempo.</div>
-      <div class="btns" style="margin-top:10px;justify-content:flex-start"><button class="btn go" id="tap" style="min-width:110px">Tap</button><div class="bpm" id="tapv" style="font-size:28px;align-self:center">-</div></div></div>
+      <div class="btns" style="margin-top:10px;justify-content:flex-start"><button class="btn go" id="tap" style="min-width:110px">Tap</button><div class="bpm" id="tapv" style="font-size:28px;align-self:center">-</div></div><button class="btn" id="tapuse" style="display:none;margin-top:10px">Use in metronome</button></div>
     <div class="qh">Start here</div>
     <details class="card" open><summary><div class="sum"><strong>Look after your hearing and hands</strong></div><span class="chev">›</span></summary><div class="body"><ul class="tips"><li>A kit is loud enough to damage hearing over time. Wear earplugs made for music, or use a practice pad or electronic kit for most sessions.</li><li>Warm up for 3 minutes before every session: slow singles and doubles on the pad.</li><li>Grip loosely. The stick should bounce back by itself. If you squeeze, your hands will hurt and your speed will stall.</li><li>Stop and rest if you feel sharp pain, numbness or tingling. Tired muscles are normal. Pain is not.</li><li>Take a short break every 20-30 minutes.</li></ul></div></details>
     <details class="card"><summary><div class="sum"><strong>Kit setup checklist</strong></div><span class="chev">›</span></summary><div class="body"><ul class="tips"><li>Throne height: thighs slope slightly down, feet flat or on the pedals with no strain.</li><li>Snare at about belly-button height, tilted slightly toward you.</li><li>Hi-hat just left of the snare, kick pedal under your right foot, cymbals within an easy reach without stretching.</li><li>Cymbal wing nuts loose so the cymbal can swing when you hit it.</li><li>Metronome ready, phone ready for recording, practice pad and sticks within reach.</li></ul></div></details>
     <details class="card"><summary><div class="sum"><strong>A 15-minute practice session</strong></div><span class="chev">›</span></summary><div class="body"><ul class="tips"><li><b>3 min:</b> warm-up. Slow singles, doubles and paradiddles at a comfortable tempo.</li><li><b>4 min:</b> this week's rudiment or reading exercise, with the metronome.</li><li><b>5 min:</b> this week's groove and fill. Start 10 BPM under the target.</li><li><b>3 min:</b> play along to a track or this week's backing track.</li></ul><p class="sub">Slow is fast. If you can not play it cleanly three times in a row, slow down. Record yourself once a week and listen back. Use the Rudiments tab to check your timing.</p></div></details>
     <details class="card"><summary><div class="sum"><strong>Reading the lessons</strong></div><span class="chev">›</span></summary><div class="body"><ul class="tips"><li><b>x</b> is a hit, <b>.</b> is a rest, <b>o</b> is a snare or kick hit, <b>g</b> is a ghost note (very soft), <b>O</b> is an open hi-hat.</li><li>A line like <b>1 e &amp; a 2 e &amp; a</b> is the count. Say it out loud as you play.</li><li>Capital R or L in a sticking pattern is an accent (louder). Lowercase is a soft tap.</li><li>The tests are not a pass or fail grade. They show what to practise next. Retest as often as you like.</li></ul></div></details>
+    <details class="card"><summary><div class="sum"><strong>Back up or move your progress</strong></div><span class="chev">\u203a</span></summary><div class="body"><p class="sub">Progress is saved in this browser only. To move it to another phone, tap Show my code, copy it, then paste it into the same box on the other phone and tap Restore.</p><textarea id="bk" rows="4" style="width:100%;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);padding:8px;font:12px ui-monospace,monospace"></textarea><div class="btns" style="margin-top:8px;justify-content:flex-start"><button class="btn" id="bkshow">Show my code</button><button class="btn" id="bkcopy">Copy</button><button class="btn go" id="bkrestore">Restore</button></div><div class="sub" id="bkmsg" style="margin-top:6px"></div></div></details>
     <details class="card"><summary><div class="sum"><strong>Reset all progress</strong></div><span class="chev">›</span></summary><div class="body"><div class="reset" style="margin:0"><button id="resetBtn">Reset all progress</button><div class="conf" id="conf">This clears every tick, practice log, score and reward. <button id="yes" class="btn">Yes, reset</button> <button id="no" class="btn">Cancel</button></div></div></div></details>
   </section>
 </main>
@@ -308,9 +309,9 @@ function status(it){const l=lessonIds(it),t=testIds(it);const dl=l.filter(i=>S.d
 function curItem(){return ALL.find(it=>!status(it).done)}
 const OPEN=new Set();
 function fmt(t){return esc(t).replace(/`([^`]+)`/g,'<code>$1</code>')}
-function lessonHtml(l){return `<div class="ls"><p class="goal">${esc(l.g)}</p><ol>${l.s.map(x=>`<li>${fmt(x)}</li>`).join('')}</ol><div class="hw"><b>Practice this week:</b> ${fmt(l.h)}</div></div>`}
-function row(id,label,text){const d=!!S.d[id];const les=window.LESSONS&&LESSONS[id];const op=OPEN.has(id);return `<div class="lr"><label class="row${d?' done':''}"><input type="checkbox" data-id="${id}"${d?' checked':''}><div>${label?`<em>${label}</em>`:''}<span>${esc(text)}</span></div></label>${les?`<button class="vbtn" data-vl="${id}">${op?'Hide lesson':'View lesson'}</button>`:''}${les&&op?lessonHtml(les):''}</div>`}
-function weekBlock(w,a){const ok=['A','B','C'].every(c=>S.d[w+c]);const cta=ok?`<button class="vbtn" style="margin:8px 0 0" data-play="${w}">Unlocked: play the Week ${w} track</button>`:`<div class="sub" style="margin-top:6px">Finish all three lessons to unlock this week's backing track.</div>`;return `<div class="wk"><h4>Week ${w}</h4>${row(w+'A','A: Technique',a[0])}${row(w+'B','B: Kit',a[1])}${row(w+'C','C: Play-along',a[2])}${cta}</div>`}
+function lessonHtml(l,id){const bp=[...new Set((l.s.join(' ').match(/(\d{2,3}) BPM/g)||[]).map(x=>parseInt(x)))].slice(0,3);const chips=bp.length?`<div style="margin-top:10px">${bp.map(v=>`<button class="vbtn" style="margin:0 6px 6px 0" data-met="${v}">Metronome ${v}</button>`).join('')}</div>`:'';const dn=!!S.d[id];return `<div class="ls"><p class="goal">${esc(l.g)}</p><ol>${l.s.map(x=>`<li>${fmt(x)}</li>`).join('')}</ol><div class="hw"><b>Practice this week:</b> ${fmt(l.h)}</div>${chips}<button class="btn ${dn?'':'go'}" style="margin-top:6px;width:100%" data-done="${id}">${dn?'Done. Tap to undo':'Mark done and open next'}</button></div>`}
+function row(id,label,text){const d=!!S.d[id];const les=window.LESSONS&&LESSONS[id];const op=OPEN.has(id);return `<div class="lr"><label class="row${d?' done':''}"><input type="checkbox" data-id="${id}"${d?' checked':''}><div>${label?`<em>${label}</em>`:''}<span>${esc(text)}</span></div></label>${les?`<button class="vbtn" data-vl="${id}">${op?'Hide lesson':'View lesson'}</button>`:''}${les&&op?lessonHtml(les,id):''}</div>`}
+function weekBlock(w,a){const ok=['A','B','C'].every(c=>S.d[w+c]);const mk=ok?'':`<button class="vbtn" style="margin:8px 0 0" data-wk="${w}">Mark whole week done</button>`;const cta=ok?`<button class="vbtn" style="margin:8px 0 0" data-play="${w}">Unlocked: play the Week ${w} track</button>`:`<div class="sub" style="margin-top:6px">Finish all three lessons to unlock this week's backing track.</div>${mk}`;return `<div class="wk"><h4>Week ${w}</h4>${row(w+'A','A: Technique',a[0])}${row(w+'B','B: Kit',a[1])}${row(w+'C','C: Play-along',a[2])}${cta}</div>`}
 function render(){
   const cur=curItem();
   let html='';
@@ -322,7 +323,7 @@ function render(){
       let body='';
       if(it.t==='m'){
         for(let w=it.s;w<=it.e;w++)body+=weekBlock(w,it.wk[w-it.s]);
-        body+=`<div class="test"><h4>Milestone ${it.n} test</h4>${it.test.map((x,i)=>row('t'+it.n+'_'+i,'',x)).join('')}<small>Pass every item except the stretch goal, then tick the milestone off. Film it.</small></div>`;
+        body+=`<div class="test"><h4>Milestone ${it.n} test</h4>${it.test.map((x,i)=>row('t'+it.n+'_'+i,'',x)).join('')}<button class="vbtn" style="margin:8px 0 0" data-tp="${it.n}">Mark all required items passed</button><small>Pass every item except the stretch goal, then tick the milestone off. Film it.</small></div>`;
       }else{
         body+=`<div class="wk"><h4>Week ${it.w}</h4>${it.l.map((x,i)=>row(it.w+L[i],'Lesson '+L[i],x)).join('')}</div><div class="test"><h4>${esc(it.exam.split(':')[0])}</h4>${row('x'+it.w,'',it.exam.split(': ').slice(1).join(': '))}</div>`;
       }
@@ -345,11 +346,22 @@ function render(){
     let txt;
     if(w&&ids.length){const li=L.indexOf(ids[0]);const lesson=cur.t==='m'?cur.wk[w-cur.s][li]:cur.l[li];txt=`Lesson ${ids[0]}: ${lesson}`}
     else txt=cur.t==='m'?`All lessons done. Take the Milestone ${cur.n} test.`:'All lessons done. Take the exam.';
-    $('now').innerHTML=`<div class="card now"><b>Up next${w?' · Week '+w:''}</b><p>${esc(txt)}</p></div>`;
+    $('now').innerHTML=`<div class="card now"><b>Up next${w?' · Week '+w:''}</b><p>${esc(txt)}</p>${w&&ids.length?`<button class="btn go" style="margin-top:10px" data-open="${w+ids[0]}">Open this lesson</button>`:''}</div>`;
   }else $('now').innerHTML=`<div class="card now"><b>Year complete</b><p>You finished the program. Compare your recital video with week 4 and set goals for year two.</p></div>`;
   if(window.Game)Game.update();
 }
 document.addEventListener('change',e=>{const id=e.target.dataset&&e.target.dataset.id;if(!id)return;if(e.target.checked)S.d[id]=1;else delete S.d[id];save();render()});
+function allLessonIds(){const a=[];for(let w=1;w<=52;w++)['A','B','C'].forEach(c=>a.push(w+c));return a}
+function focusLesson(id){OPEN.add(id);render();const el=document.querySelector(`[data-vl="${id}"]`);if(el){const d=el.closest('details');if(d)d.open=true;el.scrollIntoView({block:'center'})}}
+document.addEventListener('click',e=>{
+  const t=e.target,ds=t.dataset||{};
+  if(ds.open){document.querySelector('nav button[data-v="plan"]').click();focusLesson(ds.open);return}
+  if(ds.done){const id=ds.done;if(S.d[id]){delete S.d[id];save();render();return}
+    S.d[id]=1;OPEN.delete(id);save();const ids=allLessonIds(),nx=ids.slice(ids.indexOf(id)+1).find(x=>!S.d[x])||ids.find(x=>!S.d[x]);if(nx)focusLesson(nx);else render();return}
+  if(ds.wk){['A','B','C'].forEach(c=>S.d[ds.wk+c]=1);save();render();return}
+  if(ds.tp){const it=ALL.find(i=>i.t==='m'&&i.n===+ds.tp);if(it)it.test.forEach((x,i)=>{if(!/^Stretch/.test(x))S.d['t'+it.n+'_'+i]=1});save();render();return}
+  if(ds.met){setBpm(+ds.met);document.querySelector('nav button[data-v="met"]').click();window.scrollTo(0,0);return}
+});
 document.addEventListener('click',e=>{const id=e.target.dataset&&e.target.dataset.vl;if(!id)return;if(OPEN.has(id))OPEN.delete(id);else OPEN.add(id);render()});
 // tabs
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v))});

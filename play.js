@@ -113,5 +113,5 @@ function open(w){
   $q('player').scrollIntoView&&$q('player').scrollIntoView({block:'start'});
 }
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{if(run&&b.dataset.v!=='vault')stop()}));
-window.Player={open,cfg,stop,count:52};
+window.Player={open,cfg,stop,count:52,active:()=>run};
 })();

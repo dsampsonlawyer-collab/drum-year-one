@@ -12,7 +12,7 @@ const RUD=[
 {id:'five',name:'Five-stroke roll',n:4,bpm:50,st:'r r l l R . . . l l r r L . . .',tip:'Two doubles and a final accent, then rest. Let the sticks bounce, and land the accent on the beat.'}
 ];
 let cur=RUD[0],bpm=60,mode='hear',run=false,rac=null,timer=null,nextT=0,hlT=[];
-const B=()=>S.best||(S.best={});
+const B=()=>S.best||(S.best={}),RT=()=>S.rtempo||(S.rtempo={});
 const $q=id=>document.getElementById(id);
 function toks(r){return r.st.split(' ')}
 function isUp(c){return c!=='.'&&c===c.toUpperCase()}
@@ -127,6 +127,7 @@ function showResult(r){
   if(r.second!==undefined){const s=Math.round(r.second*100);lines.push(`<b>Doubles:</b> the second note is about ${s}% of the first. `+(s>=80&&s<=120?'Even.':s<80?'The second note is too quiet. Let it rebound more.':'The second note is too loud. Do not push it.'))}
   if(r.extra>0&&r.extra%1===0)lines.push(`<i>I heard ${r.heard} hits. ${r.extra} extra or missing hits at the end were ignored.</i>`);
   el.innerHTML=`<div class="dots2">${dots}</div><p class="sub">Green = on time, amber = slightly off, red = clearly early or late.</p>`+lines.map(l=>`<p>${l}</p>`).join('');
+  if(r.timing>=85){RT()[cur.id]=bpm;save();el.innerHTML+=`<p><button class="btn go" id="rnext">Great timing. Try ${bpm+5} BPM</button></p>`;$q('rnext').onclick=()=>{bpm=Math.min(140,bpm+5);RT()[cur.id]=bpm;save();$q('rbpm').textContent=bpm;$q('rslider').value=bpm;el.innerHTML=''}}
   const prev=B()[cur.id]||0;if(r.timing>prev){B()[cur.id]=r.timing;save();renderChips()}
 }
 async function onFile(e){
@@ -138,7 +139,7 @@ async function onFile(e){
 }
 
 // ---------- live microphone (works when the page is hosted outside the Claude sandbox) ----------
-let mr=null,chunks=[],mstream=null,mctx=null,recTick=null,meterRaf=0;
+let heard=false,lastLoud=0,mr=null,chunks=[],mstream=null,mctx=null,recTick=null,meterRaf=0;
 function micMsg(t){$q('rmsg').textContent=t}
 function endRec(){cancelAnimationFrame(meterRaf);clearInterval(recTick);if(mstream)mstream.getTracks().forEach(t=>t.stop());if(mctx){try{mctx.close()}catch(e){}mctx=null}$q('rlvl').style.width='0';$q('rrec').textContent='Record and score';stop()}
 async function rec(){
@@ -152,18 +153,20 @@ async function rec(){
   mr.onstop=async()=>{const blob=new Blob(chunks,{type:(chunks[0]&&chunks[0].type)||mime||'audio/webm'});mr=null;endRec();micMsg('');$q('rres').innerHTML='<p class="sub">Listening...</p>';
     try{showResult(analyze(await decode(blob)))}catch(err){$q('rres').innerHTML='<p class="bad">I could not read the recording. Try again, or choose a file instead.</p>'}};
   try{mctx=new (window.AudioContext||window.webkitAudioContext)();const src=mctx.createMediaStreamSource(mstream),an=mctx.createAnalyser();an.fftSize=1024;src.connect(an);const buf=new Float32Array(an.fftSize);
-    (function loop(){an.getFloatTimeDomainData(buf);let s=0;for(let i=0;i<buf.length;i++)s+=buf[i]*buf[i];$q('rlvl').style.width=Math.min(100,Math.sqrt(s/buf.length)*400)+'%';meterRaf=requestAnimationFrame(loop)})()}catch(e){}
-  const t0=Date.now();recTick=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);micMsg('Recording '+Math.floor(s/60)+':'+String(s%60).padStart(2,'0')+'. Tap Stop and score when done.');if(s>=60&&mr)mr.stop()},500);
-  mr.start();$q('rrec').textContent='Stop and score';
+    (function loop(){an.getFloatTimeDomainData(buf);let s=0;for(let i=0;i<buf.length;i++)s+=buf[i]*buf[i];const lv=Math.sqrt(s/buf.length);$q('rlvl').style.width=Math.min(100,lv*400)+'%';const nw=Date.now();if(lv>.02){heard=true;lastLoud=nw}else if(heard&&nw-lastLoud>3000&&mr&&mr.state==='recording'){mr.stop();return}meterRaf=requestAnimationFrame(loop)})()}catch(e){}
+  const t0=Date.now();recTick=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);micMsg('Recording '+Math.floor(s/60)+':'+String(s%60).padStart(2,'0')+'. It stops by itself after 3 seconds of silence.');if(s>=60&&mr)mr.stop()},500);
+  heard=false;lastLoud=Date.now();mr.start();$q('rrec').textContent='Stop and score';
   if($q('rclick').checked)start('along');
 }
 $q('rrec').onclick=rec;
-$q('rchips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=RUD.find(x=>x.id===b.dataset.r);if(!r)return;stop();cur=r;bpm=r.bpm;$q('rres').innerHTML='';renderCur()});
+$q('rchips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=RUD.find(x=>x.id===b.dataset.r);if(!r)return;stop();cur=r;bpm=RT()[r.id]||r.bpm;$q('rres').innerHTML='';renderCur()});
 $q('rslider').oninput=e=>{bpm=+e.target.value;$q('rbpm').textContent=bpm};
 document.querySelectorAll('[data-rd]').forEach(b=>b.onclick=()=>{bpm=clamp(bpm+ +b.dataset.rd,30,140);$q('rbpm').textContent=bpm;$q('rslider').value=bpm});
 $q('rhear').onclick=()=>start('hear');
 $q('ralong').onclick=()=>start('along');
 $q('rfile').addEventListener('change',onFile);
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.v!=='rud')stop()}));
+bpm=RT()[cur.id]||cur.bpm;
+window.RudActive=()=>run||!!mr;
 renderCur();
 })();
