@@ -43,7 +43,8 @@ function compute(){
   let ms=0,ex=0;ALL.forEach(it=>{if(status(it).done){if(it.t==='m')ms++;else ex++}});
   const rud=Object.values(B()).filter(v=>v>=80).length;
   const st=streaks();
-  const xp=lessons*10+tests*5+ms*100+ex*150+rud*25+st.total*15;
+  const takes=Math.min(40,S.takeCount||0);
+  const xp=lessons*10+tests*5+ms*100+ex*150+rud*25+st.total*15+takes*5;
   let li=0;LEVELS.forEach((l,i)=>{if(xp>=l[0])li=i});
   const next=LEVELS[li+1];
   const songs=SONGS.filter(s=>itemDone(s.k)).length;
@@ -62,7 +63,9 @@ const BADGES=[
 ['Quarter 2','Pass the Quarter 2 exam',c=>itemDone('q2')],
 ['Quarter 3','Pass the Quarter 3 exam',c=>itemDone('q3')],
 ['Showtime','Finish the final recital',c=>itemDone('q4')],
-['Full vault','Unlock all 52 tracks',c=>c.weeks>=52]
+['Full vault','Unlock all 52 tracks',c=>c.weeks>=52],
+['On the record','Record your first take',c=>(S.takeCount||0)>=1],
+['Studio time','Record 10 takes',c=>(S.takeCount||0)>=10]
 ];
 function unlockIds(c){
   const ids=[];

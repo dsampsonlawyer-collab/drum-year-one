@@ -140,7 +140,7 @@ async function onFile(e){
 
 // ---------- live microphone (works when the page is hosted outside the Claude sandbox) ----------
 let heard=false,lastLoud=0,mr=null,chunks=[],mstream=null,mctx=null,recTick=null,meterRaf=0;
-function micMsg(t){$q('rmsg').textContent=t}
+function micMsg(t){$q('rmsg').textContent=t;if(/Choose recording/.test(t))$q('rfall').style.display='block'}
 function endRec(){cancelAnimationFrame(meterRaf);clearInterval(recTick);if(mstream)mstream.getTracks().forEach(t=>t.stop());if(mctx){try{mctx.close()}catch(e){}mctx=null}$q('rlvl').style.width='0';$q('rrec').textContent='Record and score';stop()}
 async function rec(){
   if(mr){mr.stop();return}
@@ -168,5 +168,6 @@ $q('rfile').addEventListener('change',onFile);
 document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.v!=='rud')stop()}));
 bpm=RT()[cur.id]||cur.bpm;
 window.RudActive=()=>run||!!mr;
+window.RecUtil={decode,onsets};
 renderCur();
 })();

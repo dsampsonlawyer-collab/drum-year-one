@@ -112,6 +112,12 @@ nav button.on{color:var(--acc)}
 .plstat{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .plstat b{font-size:26px;display:block}.plstat span{color:var(--mute);font-size:14px}
 .fillchip{background:var(--acc);color:#fff!important;border-radius:99px;padding:5px 10px;font-weight:700;visibility:hidden}
+.dt:empty{width:18px;height:18px}
+#sheet{display:none;position:fixed;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;background:var(--card);border-top:1px solid var(--line);border-radius:18px 18px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.25);z-index:8}
+.shin{padding:14px 16px calc(env(safe-area-inset-bottom) + 16px);max-width:640px;margin:0 auto}
+.shh{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.shr{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0}
+.shr select,.shr input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 6px}
 .tips{margin:0;padding-left:18px;font-size:14px}.tips li{margin:6px 0}
 .lr{border-top:1px solid var(--line)}
 .lr:first-of-type{border-top:0}
@@ -152,8 +158,9 @@ nav button.on{color:var(--acc)}
       <ol class="how"><li>Practise with Play along until it feels steady.</li><li>Tap Record and score and play 20-30 seconds at the same tempo. Keep the phone close to the pad and play 4 or more repeats.</li><li>Tap Stop and score to see your results.</li></ol>
       <div class="recbox"><button class="btn go" id="rrec" style="min-width:170px">Record and score</button><div class="lvl"><i id="rlvl"></i></div><div class="sub" id="rmsg"></div>
       <label class="sub chk"><input type="checkbox" id="rclick"> Play the click while I record (headphones only, or the click is picked up as hits)</label></div>
-      <p class="sub" style="margin:12px 0 8px">Or score a recording you already made (voice memo or video):</p>
+      <div id="rfall" style="display:none"><p class="sub" style="margin:12px 0 8px">Or score a recording you already made (voice memo or video):</p>
       <label class="btn go filebtn">Choose recording<input type="file" id="rfile" accept="audio/*,video/*" hidden></label>
+      </div>
       <div id="rres"></div>
       <p class="sub" style="margin-top:10px">This is an estimate from the sound only. It measures spacing, tempo, hand loudness and accents. It cannot tell which hand played a note.</p>
     </div>
@@ -201,6 +208,7 @@ nav button.on{color:var(--acc)}
   <button data-v="tools">Tools</button>
 </nav>
 <div id="toast" role="status"></div>
+<div id="sheet"></div>
 <script src="l1.js"></script>
 <script src="l1b.js"></script>
 <script src="l2.js"></script>
@@ -309,7 +317,7 @@ function status(it){const l=lessonIds(it),t=testIds(it);const dl=l.filter(i=>S.d
 function curItem(){return ALL.find(it=>!status(it).done)}
 const OPEN=new Set();
 function fmt(t){return esc(t).replace(/`([^`]+)`/g,'<code>$1</code>')}
-function lessonHtml(l,id){const bp=[...new Set((l.s.join(' ').match(/(\d{2,3}) BPM/g)||[]).map(x=>parseInt(x)))].slice(0,3);const chips=bp.length?`<div style="margin-top:10px">${bp.map(v=>`<button class="vbtn" style="margin:0 6px 6px 0" data-met="${v}">Metronome ${v}</button>`).join('')}</div>`:'';const dn=!!S.d[id];return `<div class="ls"><p class="goal">${esc(l.g)}</p><ol>${l.s.map(x=>`<li>${fmt(x)}</li>`).join('')}</ol><div class="hw"><b>Practice this week:</b> ${fmt(l.h)}</div>${chips}<button class="btn ${dn?'':'go'}" style="margin-top:6px;width:100%" data-done="${id}">${dn?'Done. Tap to undo':'Mark done and open next'}</button></div>`}
+function lessonHtml(l,id){const bp=[...new Set((l.s.join(' ').match(/(\d{2,3}) BPM/g)||[]).map(x=>parseInt(x)))].slice(0,3);const chips=bp.length?`<div style="margin-top:10px">${bp.map(v=>`<button class="vbtn" style="margin:0 6px 6px 0" data-met="${v}">Metronome ${v}</button>`).join('')}</div>`:'';const dn=!!S.d[id];return `<div class="ls"><p class="goal">${esc(l.g)}</p><ol>${l.s.map(x=>`<li>${fmt(x)}</li>`).join('')}</ol><div class="hw"><b>Practice this week:</b> ${fmt(l.h)}</div>${chips}<button class="vbtn" style="margin:8px 0 0;width:100%" data-rec="${id}">Record a take</button><button class="btn ${dn?'':'go'}" style="margin-top:8px;width:100%" data-done="${id}">${dn?'Done. Tap to undo':'Mark done and open next'}</button></div>`}
 function row(id,label,text){const d=!!S.d[id];const les=window.LESSONS&&LESSONS[id];const op=OPEN.has(id);return `<div class="lr"><label class="row${d?' done':''}"><input type="checkbox" data-id="${id}"${d?' checked':''}><div>${label?`<em>${label}</em>`:''}<span>${esc(text)}</span></div></label>${les?`<button class="vbtn" data-vl="${id}">${op?'Hide lesson':'View lesson'}</button>`:''}${les&&op?lessonHtml(les,id):''}</div>`}
 function weekBlock(w,a){const ok=['A','B','C'].every(c=>S.d[w+c]);const mk=ok?'':`<button class="vbtn" style="margin:8px 0 0" data-wk="${w}">Mark whole week done</button>`;const cta=ok?`<button class="vbtn" style="margin:8px 0 0" data-play="${w}">Unlocked: play the Week ${w} track</button>`:`<div class="sub" style="margin-top:6px">Finish all three lessons to unlock this week's backing track.</div>${mk}`;return `<div class="wk"><h4>Week ${w}</h4>${row(w+'A','A: Technique',a[0])}${row(w+'B','B: Kit',a[1])}${row(w+'C','C: Play-along',a[2])}${cta}</div>`}
 function render(){
@@ -323,7 +331,7 @@ function render(){
       let body='';
       if(it.t==='m'){
         for(let w=it.s;w<=it.e;w++)body+=weekBlock(w,it.wk[w-it.s]);
-        body+=`<div class="test"><h4>Milestone ${it.n} test</h4>${it.test.map((x,i)=>row('t'+it.n+'_'+i,'',x)).join('')}<button class="vbtn" style="margin:8px 0 0" data-tp="${it.n}">Mark all required items passed</button><small>Pass every item except the stretch goal, then tick the milestone off. Film it.</small></div>`;
+        body+=`<div class="test"><h4>Milestone ${it.n} test</h4>${it.test.map((x,i)=>row('t'+it.n+'_'+i,'',x)).join('')}<button class="vbtn" style="margin:8px 6px 0 0" data-rect="${it.n}">Record your test</button><button class="vbtn" style="margin:8px 0 0" data-tp="${it.n}">Mark all required items passed</button><small>Pass every item except the stretch goal, then tick the milestone off. Film it.</small></div>`;
       }else{
         body+=`<div class="wk"><h4>Week ${it.w}</h4>${it.l.map((x,i)=>row(it.w+L[i],'Lesson '+L[i],x)).join('')}</div><div class="test"><h4>${esc(it.exam.split(':')[0])}</h4>${row('x'+it.w,'',it.exam.split(': ').slice(1).join(': '))}</div>`;
       }
@@ -355,6 +363,8 @@ function allLessonIds(){const a=[];for(let w=1;w<=52;w++)['A','B','C'].forEach(c
 function focusLesson(id){OPEN.add(id);render();const el=document.querySelector(`[data-vl="${id}"]`);if(el){const d=el.closest('details');if(d)d.open=true;el.scrollIntoView({block:'center'})}}
 document.addEventListener('click',e=>{
   const t=e.target,ds=t.dataset||{};
+  if(ds.rec){const l=LESSONS[ds.rec];const m=l&&(l.s.join(' ').match(/(\d{2,3}) BPM/));Rec.open(ds.rec,l?l.g:'Your take',m?+m[1]:80,2);return}
+  if(ds.rect){const it=ALL.find(i=>i.t==='m'&&i.n===+ds.rect);const m=it&&(it.test.join(' ').match(/(\d{2,3}) BPM/));Rec.open('t'+ds.rect,'Milestone '+ds.rect+' test',m?+m[1]:80,2);return}
   if(ds.open){document.querySelector('nav button[data-v="plan"]').click();focusLesson(ds.open);return}
   if(ds.done){const id=ds.done;if(S.d[id]){delete S.d[id];save();render();return}
     S.d[id]=1;OPEN.delete(id);save();const ids=allLessonIds(),nx=ids.slice(ids.indexOf(id)+1).find(x=>!S.d[x])||ids.find(x=>!S.d[x]);if(nx)focusLesson(nx);else render();return}
@@ -382,6 +392,7 @@ dots();render();
 </script>
 <script src="rud.js"></script>
 <script src="play.js"></script>
+<script src="rec.js"></script>
 <script src="game.js"></script>
 <script>if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){})}</script>
 </body>
