@@ -28,7 +28,7 @@ function lessonVideo(l,lid){
 }
 function rudVideo(id,name){
   const r=RV[id];
-  return r?box(r[0],r[1],'',id):box('','',SQ[id]||name+' drum rudiment lesson',id);
+  return r?box(r[0],r[1],'',id,true):box('','',SQ[id]||name+' drum rudiment lesson',id);
 }
 function mount(){
   const tip=document.getElementById('rtip');if(!tip)return;
