@@ -5,17 +5,14 @@
 html,body{font-family:Nunito,-apple-system,system-ui,Segoe UI,Roboto,sans-serif;font-weight:700;color-scheme:dark}
 body{background:linear-gradient(180deg,#0B0420 0%,#1A0A3D 55%,#2A1260 100%) fixed}
 h1,h2,h3,h4,.qh,.bpm,nav button,.btn,.vbtn,.tk{font-family:var(--disp);font-weight:400}
-header{position:relative;margin:0 12px 6px;padding:18px 18px 14px;border-radius:28px;overflow:hidden;background:linear-gradient(180deg,#1A0A3D 0%,#8A3FFC 60%,#FF2E4D 100%);max-width:640px;margin-left:auto;margin-right:auto}
-header:before{content:"";position:absolute;right:-30px;top:-20px;width:190px;height:190px;border-radius:50%;background:linear-gradient(180deg,#FF2E4D 0%,#8A3FFC 100%);opacity:.9}
-header:after{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:repeating-linear-gradient(180deg,rgba(44,75,255,.9) 0 2px,transparent 2px 9px),repeating-linear-gradient(90deg,rgba(44,75,255,.6) 0 2px,transparent 2px 28px);opacity:.55;pointer-events:none;mask-image:linear-gradient(180deg,transparent,#000)}
-header>*{position:relative;z-index:1}
-h1{font-size:34px;letter-spacing:0;text-shadow:0 3px 0 rgba(11,4,32,.55)}
-header .sub,header #lv{color:#FFFFFF!important;font-weight:800}
+header{position:relative;margin:0 12px 6px;padding:18px 18px 14px;border-radius:28px;overflow:hidden;background:linear-gradient(180deg,rgba(11,4,32,.15) 0%,rgba(11,4,32,.75) 100%),url(img/sunset.jpg) center/cover;max-width:640px;margin-left:auto;margin-right:auto;border:3px solid var(--purple)}
+h1{font-size:34px;letter-spacing:0;text-shadow:0 3px 0 rgba(11,4,32,.7)}
+header .sub,header #lv{color:#FFFFFF!important;font-weight:800;text-shadow:0 2px 0 rgba(11,4,32,.7)}
 header #lv{color:var(--yellow)!important}
 .bar{background:rgba(11,4,32,.65);height:12px}
 .bar i{background:linear-gradient(90deg,var(--yellow),#FF3DA8)}
 .card{background:var(--card);border:3px solid var(--line);border-radius:26px}
-.card.now{background:linear-gradient(135deg,#8A3FFC,#2C4BFF);border:0}
+.card.now{background:linear-gradient(90deg,rgba(11,4,32,.85),rgba(11,4,32,.25)),url(img/sunset.jpg) center/cover;border:3px solid var(--acc)}
 .now b{color:var(--yellow)}
 .qh{color:var(--yellow);font-size:16px;letter-spacing:.04em}
 .btn,.vbtn{border-radius:999px;border:0;background:var(--blue);color:#fff;box-shadow:0 5px 0 rgba(44,75,255,.45);padding:12px 20px}
@@ -48,3 +45,5 @@ nav button[data-v=rud].on:before{background:#FF3DA8}nav button[data-v=vault].on:
 #hbar b,.hcard h2{font-family:var(--disp);font-weight:400}#hscore{font-family:Orbitron,var(--disp)}
 .hcard{background:#1A0A3D;border:3px solid var(--purple);border-radius:28px}
 .hp{font-family:Nunito,system-ui,sans-serif;font-weight:800}
+.banner{height:110px;border-radius:24px;border:3px solid var(--blue);margin:10px 0;background:url(img/shelf.jpg) center/cover}
+#hero{background:#0B0420 url(img/stage.jpg) center/cover no-repeat}

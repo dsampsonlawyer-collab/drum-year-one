@@ -86,7 +86,7 @@ function size(){const r=cv.getBoundingClientRect();dpr=window.devicePixelRatio||
 function draw(now){
   const hitY=H-40,look=2.1,pps=(hitY-10)/look,lw=W/6;
   g2.clearRect(0,0,W,H);
-  const gr=g2.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#0b0908');gr.addColorStop(1,'#1d1713');g2.fillStyle=gr;g2.fillRect(0,0,W,H);
+  g2.fillStyle='rgba(11,4,32,.55)';g2.fillRect(0,0,W,H);
   LANES.forEach((l,i)=>{g2.fillStyle=i%2?'rgba(255,255,255,.035)':'rgba(255,255,255,.015)';g2.fillRect(i*lw,0,lw,H);
     if(laneFlash[l]>performance.now()){g2.fillStyle=COL[l]+'55';g2.fillRect(i*lw,0,lw,H)}});
   // beat lines

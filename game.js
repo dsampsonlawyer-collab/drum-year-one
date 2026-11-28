@@ -92,7 +92,7 @@ function renderVault(c){
   let h=`<div class="card" style="padding:14px 16px"><div class="sub">Level ${c.li+1}</div><h3 style="margin:2px 0 8px;font-size:22px">${lv[1]}</h3>
     <div class="bar"><i style="width:${pctx}%"></i></div><div class="sub" style="margin-top:6px">${c.xp} XP${c.next?` · ${nx-c.xp} to ${c.next[1]}`:' · top level'}</div>
     <div class="stats" style="margin-top:12px"><div class="stat"><b>${c.st.cur}</b><span>Day streak</span></div><div class="stat"><b>${c.st.wkDays}/4</b><span>Practice days this week</span></div></div>
-    <div class="sdw">${dots}</div></div>`;
+    <div class="sdw">${dots}</div></div><div class="banner" role="img" aria-label="Neon drum machine and boombox"></div>`;
   if(nextW){h+=`<div class="card now"><b>Next unlock</b><p>Week ${nextW} track: ${Player.cfg(nextW).name}. Finish ${3-weekCount(nextW)} more lesson${3-weekCount(nextW)===1?'':'s'} in Week ${nextW}.</p></div>`}
   h+=`<div class="qh">Backing tracks</div><div class="sub" style="margin:0 4px 8px">Finish all three lessons in a week to unlock its track: a bass and chords band at a tempo that fits the week, with drums left for you.</div>`;
   const groups=[[1,13,'Quarter 1'],[14,26,'Quarter 2'],[27,39,'Quarter 3'],[40,52,'Quarter 4']];
