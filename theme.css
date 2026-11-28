@@ -128,3 +128,7 @@ header{margin-top:22px!important}
 .seg .btn.sel{opacity:1;background:#8B5CF6;box-shadow:0 0 0 3px #fff inset}
 .beatsec .dots{margin:4px 0}
 .beatsec .dots i{width:26px;height:26px}
+
+.met .dots{margin:6px 0;gap:12px}
+.met .dots i{width:40px;height:40px}
+.beatsec .dots i{width:40px;height:40px}
