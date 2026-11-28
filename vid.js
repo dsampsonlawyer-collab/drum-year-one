@@ -4,13 +4,14 @@ const SQ={accent:'accented single strokes drum lesson',flamtap:'flam tap drum ru
 const LV=[[/grip|hold|stick/i,'6nq-JeTUIEY','How to hold drumsticks'],[/rock beat|first beat|8th|eighth|backbeat/i,'XeVLe4dX9V8','The classic rock beat']];
 const e=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function parseId(u){u=String(u||'').trim();const m=u.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/)||(/^[\w-]{11}$/.test(u)?[0,u]:null);return m?m[1]:''}
+const frame=id=>`<iframe src="https://www.youtube-nocookie.com/embed/${id}?rel=0&playsinline=1" title="Video" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
 const yt=q=>'https://www.youtube.com/results?search_query='+encodeURIComponent(q);
-function box(id,title,q,key){
+function box(id,title,q,key,open){
   const lnk=id?`https://www.youtube.com/watch?v=${id}`:yt(q);
   return `<div class="vid" data-vk="${e(key)}"><div class="vidh"><b>${id?'Video: '+e(title):'Video lessons'}</b></div>`+
-  (id?`<button class="vbtn vplay" data-vid="${id}">&#9654; Watch here</button>`:'')+
+  (id?`<button class="vbtn vplay" data-vid="${id}">${open?'&#10005; Close video':'&#9654; Watch here'}</button>`:'')+
   `<a class="vbtn" target="_blank" rel="noopener" href="${lnk}">${id?'Open on YouTube':'Search YouTube for this'}</a>`+
-  `<div class="vplayer"></div></div>`;
+  `<div class="vplayer">${open?frame(id):''}</div></div>`;
 }
 function myBox(lid){
   S.vids=S.vids||{};const id=S.vids[lid];
@@ -21,7 +22,7 @@ function myBox(lid){
 }
 function lessonVideo(l,lid){
   let h='';const g=(l.g||'')+' '+(l.t||'');
-  for(const [re,id,t] of LV)if(re.test(g)){h+=box(id,t,'',lid+'c');break}
+  for(const [re,id,t] of LV)if(re.test(g)){h+=box(id,t,'',lid+'c',true);break}
   h+=box('','','beginner drum lesson '+(l.g||'').replace(/[^\w ]/g,' ').split(' ').slice(0,7).join(' '),lid+'s');
   return h+myBox(lid);
 }
