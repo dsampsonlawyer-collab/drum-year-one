@@ -42,6 +42,7 @@ function renderCur(){
   }).join('');
   $q('rbpm').textContent=bpm;$q('rslider').value=bpm;
   renderChips();
+  window.__rudCur=cur;if(window.Vid)Vid.mount();
 }
 function click(t,acc,gain){const o=rac.createOscillator(),g=rac.createGain();o.type='sine';o.frequency.value=acc?2600:2000;g.gain.setValueAtTime(gain||.25,t);g.gain.exponentialRampToValueAtTime(.001,t+.04);o.connect(g);g.connect(rac.destination);o.start(t);o.stop(t+.05)}
 function hit(t,hand,gain){const o=rac.createOscillator(),g=rac.createGain();o.type='triangle';o.frequency.value=hand==='R'?900:620;g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.001,t+.09);o.connect(g);g.connect(rac.destination);o.start(t);o.stop(t+.1)}
