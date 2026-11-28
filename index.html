@@ -148,6 +148,7 @@ nav button.on{color:var(--acc)}
 <link rel="stylesheet" href="theme.css">
 </head>
 <body>
+<div id="splash" role="presentation"><div class="sp-burst"></div><div class="sp-in"><div class="sp-top">THE BEGINNER'S DRUM COURSE</div><h1 class="sp-t"><span>DRUM</span><span>YEAR</span><span>ONE</span></h1><div class="sp-eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="sp-sub">52 weeks. 156 lessons. 16 songs.</div><div class="sp-load"><b></b></div><div class="sp-tap">Tap to start</div></div></div>
 <header>
   <h1>Drum Year One</h1>
   <div class="sub" id="sub"></div>
@@ -411,6 +412,7 @@ dots();render();
 <script src="hero.js"></script>
 <script src="rec.js"></script>
 <script src="game.js"></script>
+<script>(function(){var s=document.getElementById('splash');if(!s)return;var gone=false;function go(){if(gone)return;gone=true;s.classList.add('out');setTimeout(function(){s.style.display='none'},450)}s.addEventListener('click',go);setTimeout(go,3000)})();</script>
 <script>if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){})}</script>
 </body>
 </html>

@@ -87,3 +87,25 @@ details>summary{padding:16px}
 .st{display:block;margin-top:4px;font:800 12px Nunito,sans-serif;color:var(--mute)}
 .st.ok{color:var(--ok)}.st.up{color:var(--acc)}
 .row div{display:block}
+
+#splash{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,rgba(11,4,32,.35),rgba(11,4,32,.85)),url(img/sunset.jpg) center/cover;transition:opacity .45s,transform .45s;overflow:hidden}
+#splash.out{opacity:0;transform:scale(1.06);pointer-events:none}
+.sp-burst{position:absolute;width:140vmax;height:140vmax;left:50%;top:44%;margin:-70vmax 0 0 -70vmax;background:repeating-conic-gradient(from 0deg,rgba(255,46,77,.22) 0 7deg,rgba(138,63,252,0) 7deg 14deg);animation:spin 18s linear infinite;mask-image:radial-gradient(circle,#000 0,transparent 55%)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sp-in{position:relative;padding:0 24px;max-width:420px}
+.sp-top{font:800 13px Nunito,system-ui,sans-serif;letter-spacing:.2em;color:#FFC83D;margin-bottom:10px;opacity:0;animation:fadeUp .5s .1s forwards}
+.sp-t{margin:0;display:flex;flex-direction:column;line-height:.92;font-family:Righteous,"Arial Rounded MT Bold",Impact,sans-serif;font-weight:400;letter-spacing:.02em;text-transform:uppercase}
+.sp-t span{display:block;font-size:min(26vw,120px);color:#fff;-webkit-text-stroke:3px #0B0420;paint-order:stroke fill;text-shadow:0 6px 0 #FF2E4D,0 12px 0 #2C4BFF,0 0 40px rgba(138,63,252,.9);opacity:0;transform:translateY(-60px) scale(1.3) rotate(-4deg);animation:slam .5s cubic-bezier(.2,1.4,.4,1) forwards}
+.sp-t span:nth-child(1){animation-delay:.3s}.sp-t span:nth-child(2){animation-delay:.6s;color:#FFC83D}.sp-t span:nth-child(3){animation-delay:.9s;color:#FF3DA8}
+@keyframes slam{to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.sp-eq{display:flex;gap:6px;justify-content:center;align-items:flex-end;height:44px;margin:22px 0 10px}
+.sp-eq i{width:10px;border-radius:5px;background:linear-gradient(180deg,#FF2E4D,#8A3FFC);animation:eq .7s ease-in-out infinite alternate;height:10px}
+.sp-eq i:nth-child(2){animation-delay:.1s;background:linear-gradient(180deg,#2C4BFF,#8A3FFC)}.sp-eq i:nth-child(3){animation-delay:.2s}.sp-eq i:nth-child(4){animation-delay:.05s;background:linear-gradient(180deg,#2C4BFF,#8A3FFC)}.sp-eq i:nth-child(5){animation-delay:.25s}.sp-eq i:nth-child(6){animation-delay:.15s;background:linear-gradient(180deg,#2C4BFF,#8A3FFC)}.sp-eq i:nth-child(7){animation-delay:.3s}
+@keyframes eq{to{height:44px}}
+.sp-sub{font:800 15px Nunito,system-ui,sans-serif;color:#C9BFF2;opacity:0;animation:fadeUp .5s 1.3s forwards}
+.sp-load{height:10px;border-radius:99px;background:rgba(11,4,32,.7);border:2px solid #4B3A8C;margin:18px auto 8px;width:70%;overflow:hidden}
+.sp-load b{display:block;height:100%;width:0;background:linear-gradient(90deg,#FFC83D,#FF3DA8);animation:ld 3s linear forwards}
+@keyframes ld{to{width:100%}}
+.sp-tap{font:800 12px Nunito,system-ui,sans-serif;color:#8C7FC4;opacity:0;animation:fadeUp .5s 1.8s forwards}
+@media (prefers-reduced-motion:reduce){.sp-burst,.sp-eq i{animation:none}.sp-t span,.sp-top,.sp-sub,.sp-tap{animation-duration:.01s;animation-delay:0s}}
