@@ -220,19 +220,24 @@ nav button.on{color:var(--acc)}
   </section>
   <section class="view" id="v-met">
     <div class="card met">
-      <div class="bpm" id="bpm">80</div>
-      <div class="sub">beats per minute</div>
-      <div class="dots" id="dots"></div>
-      <input type="range" id="slider" min="40" max="200" value="80" aria-label="Tempo">
-      <div class="btns">
-        <button class="btn" data-d="-5">-5</button><button class="btn" data-d="-1">-1</button>
-        <button class="btn go" id="go">Start</button>
-        <button class="btn" data-d="1">+1</button><button class="btn" data-d="5">+5</button>
+      <div class="msec tempo">
+        <div class="mlab">Tempo</div>
+        <div class="bpmrow"><div class="bpm" id="bpm">80</div><div class="bpmu">BPM</div></div>
+        <div class="sub">beats per minute</div>
+        <input type="range" id="slider" min="40" max="200" value="80" aria-label="Tempo">
+        <div class="mrow4">
+          <button class="btn" data-d="-5">-5</button><button class="btn" data-d="-1">-1</button><button class="btn" data-d="1">+1</button><button class="btn" data-d="5">+5</button>
+        </div>
+        <button class="btn go mstart" id="go">Start</button>
       </div>
-      <div class="btns" style="margin-top:14px">
-        <button class="btn" data-b="3">3</button><button class="btn" data-b="4">4</button><button class="btn" data-b="6">6</button>
+      <div class="msec beatsec">
+        <div class="mlab">Beats per bar</div>
+        <div class="seg">
+          <button class="btn" data-b="3">3</button><button class="btn" data-b="4">4</button><button class="btn" data-b="6">6</button>
+        </div>
+        <div class="dots" id="dots"></div>
+        <div class="sub">the first dot is the accented beat</div>
       </div>
-      <div class="sub" style="margin-top:6px">beats per bar</div>
     </div>
     <div class="sub" style="padding:0 6px">Start slow. Test tempos in the plan are targets: reach them in small steps.</div>
   </section>
@@ -432,7 +437,7 @@ document.addEventListener('click',e=>{const id=e.target.dataset&&e.target.datase
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v))});
 // metronome
 let bpm=80,beats=4,run=false,ac,next=0,beat=0,timer;
-function dots(){$('dots').innerHTML=[...Array(beats)].map((_,i)=>`<i class="${i===0?'first':''}" data-i="${i}"></i>`).join('')}
+function dots(){document.querySelectorAll('[data-b]').forEach(x=>x.classList.toggle('sel',+x.dataset.b===beats));$('dots').innerHTML=[...Array(beats)].map((_,i)=>`<i class="${i===0?'first':''}" data-i="${i}"></i>`).join('')}
 function setBpm(v){bpm=Math.max(40,Math.min(200,v));$('bpm').textContent=bpm;$('slider').value=bpm}
 function click(t,acc){const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=acc?1500:1000;g.gain.setValueAtTime(.6,t);g.gain.exponentialRampToValueAtTime(.001,t+.05);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+.06)}
 function sched(){while(next<ac.currentTime+.12){const b=beat%beats;click(next,b===0);const dl=(next-ac.currentTime)*1000;setTimeout(()=>{document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('hit',i===b))},Math.max(0,dl));next+=60/bpm;beat++}timer=setTimeout(sched,25)}
