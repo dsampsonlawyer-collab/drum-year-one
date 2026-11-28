@@ -21,8 +21,9 @@ function myBox(lid){
   `<div class="vplayer"></div></div>`;
 }
 function lessonVideo(l,lid){
-  let h='';const g=(l.g||'')+' '+(l.t||'');
-  for(const [re,id,t] of LV)if(re.test(g)){h+=box(id,t,'',lid+'c',true);break}
+  let h='';const g=(l.g||'')+' '+(l.t||'');const vm=window.VMAP,k=vm&&vm.M[lid];
+  if(k)h+=box(vm.V[k][0],vm.V[k][1],'',lid+'c',true);
+  else for(const [re,id,t] of LV)if(re.test(g)){h+=box(id,t,'',lid+'c',true);break}
   h+=box('','','beginner drum lesson '+(l.g||'').replace(/[^\w ]/g,' ').split(' ').slice(0,7).join(' '),lid+'s');
   return h+myBox(lid);
 }
