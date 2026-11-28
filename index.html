@@ -144,11 +144,49 @@ nav button.on{color:var(--acc)}
 .seg{display:flex;border:1px solid #4a3d33;border-radius:99px;overflow:hidden}.seg button{border:0;background:none;color:#ddd;padding:6px 10px;font:600 12px inherit;font-family:inherit}.seg button.on{background:#ff8a00;color:#111}
 .hstars{font-size:30px;color:#f2c94c;letter-spacing:3px}
 .hcard .btns{display:flex;gap:8px;flex-wrap:wrap}.hcard .btn{border:1px solid #4a3d33;background:none;color:#fff;border-radius:99px;padding:10px 16px;font:600 14px inherit;font-family:inherit}.hcard .btn.go{background:#ff8a00;color:#111;border:0}
+
+#splash{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:linear-gradient(160deg,#2C4BFF 0%,#8A3FFC 50%,#FF2E4D 100%);transition:opacity .35s,transform .35s;font-family:Righteous,"Arial Rounded MT Bold",Impact,sans-serif}
+#splash.out{opacity:0;transform:scale(1.08);pointer-events:none}
+#splash .sp-halftone{position:absolute;inset:0;background:radial-gradient(circle,rgba(11,4,32,.55) 28%,transparent 30%) 0 0/18px 18px;-webkit-mask-image:linear-gradient(180deg,transparent 10%,#000 100%);mask-image:linear-gradient(180deg,transparent 10%,#000 100%)}
+#splash .sp-rays{position:absolute;width:150vmax;height:150vmax;left:50%;top:40%;margin:-75vmax 0 0 -75vmax;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.2) 0 5deg,transparent 5deg 15deg);animation:spSpin 25s linear infinite}
+@keyframes spSpin{to{transform:rotate(360deg)}}
+#splash .sp-in{position:relative;width:100%;max-width:440px;padding:0 20px;transform:rotate(-3deg)}
+#splash .sp-cap{display:inline-block;background:#FFC83D;color:#0B0420;border:4px solid #0B0420;box-shadow:5px 5px 0 #0B0420;padding:6px 12px;font:800 12px Nunito,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;transform:rotate(2deg)}
+#splash .sp-cap1{margin-bottom:14px;opacity:0;animation:spPop .35s .1s forwards}
+#splash .sp-t{margin:0;display:flex;flex-direction:column;align-items:center;line-height:.95;font-weight:400;text-transform:uppercase}
+#splash .sp-t span{display:block;font-size:min(27vw,118px);-webkit-text-stroke:7px #0B0420;paint-order:stroke fill;text-shadow:7px 8px 0 #0B0420;opacity:0;transform:scale(2.2) rotate(-8deg);animation:spSlam .38s cubic-bezier(.2,1.5,.4,1) forwards}
+#splash .sp-t span:nth-child(1){color:#fff;animation-delay:.25s}
+#splash .sp-t span:nth-child(2){color:#FFC83D;animation-delay:.6s}
+#splash .sp-t span:nth-child(3){color:#FF2E4D;animation-delay:.95s}
+@keyframes spSlam{60%{opacity:1;transform:scale(.92) rotate(1deg)}to{opacity:1;transform:none}}
+@keyframes spPop{from{opacity:0;transform:scale(.4) rotate(-10deg)}to{opacity:1;transform:rotate(2deg)}}
+#splash .sp-bubble{position:relative;display:inline-block;margin:16px 0 6px;background:#fff;color:#0B0420;border:4px solid #0B0420;border-radius:24px;padding:10px 18px;font-size:20px;box-shadow:5px 5px 0 #0B0420;opacity:0;animation:spPop .35s 1.4s forwards}
+#splash .sp-bubble:after{content:"";position:absolute;left:28px;bottom:-18px;width:22px;height:22px;background:#fff;border-right:4px solid #0B0420;border-bottom:4px solid #0B0420;transform:skewX(30deg) rotate(45deg) translate(-4px,-4px)}
+#splash .sp-cap2{display:flex;align-items:center;gap:10px;margin-top:22px;background:#fff;transform:rotate(1.5deg);width:86%}
+#splash .sp-cap2 em{font:400 16px Righteous,Impact,sans-serif;font-style:normal;letter-spacing:.06em}
+#splash .sp-seg{display:flex;gap:3px;flex:1;height:18px}
+#splash .sp-seg i{flex:1;background:#E4DFF5;border:2px solid #0B0420;animation:spFill .01s forwards}
+#splash .sp-seg i:nth-child(1){animation-delay:.3s}#splash .sp-seg i:nth-child(2){animation-delay:.6s}#splash .sp-seg i:nth-child(3){animation-delay:.9s}#splash .sp-seg i:nth-child(4){animation-delay:1.2s}#splash .sp-seg i:nth-child(5){animation-delay:1.5s}#splash .sp-seg i:nth-child(6){animation-delay:1.8s}#splash .sp-seg i:nth-child(7){animation-delay:2.1s}#splash .sp-seg i:nth-child(8){animation-delay:2.4s}#splash .sp-seg i:nth-child(9){animation-delay:2.65s}#splash .sp-seg i:nth-child(10){animation-delay:2.85s}
+@keyframes spFill{to{background:#FF2E4D}}
+#splash .sp-tap{margin-top:16px;font:800 12px Nunito,system-ui,sans-serif;color:#fff;text-shadow:0 2px 0 #0B0420;letter-spacing:.1em;text-transform:uppercase}
+#splash .sp-pow{position:absolute;right:5%;top:2.5%;width:30vmin;height:30vmin;max-width:150px;max-height:150px;transform:rotate(12deg);animation:spBump .6s .2s ease-in-out infinite alternate}
+#splash .sp-pow i,#splash .sp-pow b{position:absolute;inset:0;clip-path:polygon(50.0% 0.0%,57.6% 16.9%,71.7% 5.0%,71.2% 23.4%,89.1% 18.8%,80.6% 35.2%,98.7% 38.9%,84.0% 50.0%,98.7% 61.1%,80.6% 64.8%,89.1% 81.2%,71.2% 76.6%,71.7% 95.0%,57.6% 83.1%,50.0% 100.0%,42.4% 83.1%,28.3% 95.0%,28.8% 76.6%,10.9% 81.2%,19.4% 64.8%,1.3% 61.1%,16.0% 50.0%,1.3% 38.9%,19.4% 35.2%,10.9% 18.8%,28.8% 23.4%,28.3% 5.0%,42.4% 16.9%)}
+#splash .sp-pow i{background:#0B0420;transform:translate(6px,7px)}
+#splash .sp-pow b{background:#FFC83D}
+#splash .sp-pow span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:400 24px Righteous,Impact,sans-serif;color:#FF2E4D;-webkit-text-stroke:3px #0B0420;paint-order:stroke fill;transform:rotate(-8deg)}
+@keyframes spBump{to{transform:rotate(8deg) scale(1.08)}}
+@media (prefers-reduced-motion:reduce){#splash .sp-rays,#splash .sp-pow{animation:none}}
 </style>
 <link rel="stylesheet" href="theme.css">
 </head>
 <body>
-<div id="splash" role="presentation"><div class="sp-burst"></div><div class="sp-in"><div class="sp-top">THE BEGINNER'S DRUM COURSE</div><h1 class="sp-t"><span>DRUM</span><span>YEAR</span><span>ONE</span></h1><div class="sp-eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="sp-sub">52 weeks. 156 lessons. 16 songs.</div><div class="sp-load"><b></b></div><div class="sp-tap">Tap to start</div></div></div>
+<div id="splash" role="presentation"><div class="sp-halftone"></div><div class="sp-rays"></div>
+<div class="sp-pow"><i></i><b></b><span>POW!</span></div>
+<div class="sp-in"><div class="sp-cap sp-cap1">Issue #1 · The beginner's drum course</div>
+<h1 class="sp-t"><span>DRUM</span><span>YEAR</span><span>ONE</span></h1>
+<div class="sp-bubble">Let's get drumming!</div>
+<div class="sp-cap sp-cap2"><em>LOADING</em><div class="sp-seg"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+<div class="sp-tap">Tap to skip</div></div></div>
 <header>
   <h1>Drum Year One</h1>
   <div class="sub" id="sub"></div>
