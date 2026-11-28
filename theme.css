@@ -102,3 +102,4 @@ header .bar i{background:#FF2E4D!important;border-right:3px solid #0B0420}
 header .bar:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 3px),#0B0420 calc(10% - 3px) 10%);opacity:.9;pointer-events:none}
 @media (prefers-reduced-motion:reduce){header:before{animation:none}}
 header{margin-top:22px!important}
+#rviz{display:block;width:100%;height:190px;border-radius:20px;border:3px solid var(--purple);margin:6px 0 10px;background:#0B0420}

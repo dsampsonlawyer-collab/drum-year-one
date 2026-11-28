@@ -23,6 +23,9 @@ function parse(r){
   tk.forEach((t,i)=>{if(t==='.')return;const m=t[t.length-1];notes.push({i,hand:m.toUpperCase(),acc:mixed?isUp(m):false,tap:mixed&&!isUp(m),grace:t.length===2})});
   return {tk,notes,mixed};
 }
+let VZ=[],VZK=new Set();
+function vizCycle(T,d){const key=Math.round(T*1000);if(VZK.has(key))return;VZK.add(key);const P=parse(cur);P.notes.forEach(n=>{const t=T+n.i*d;VZ.push({t,hand:n.hand,h:n.acc?1:(n.tap?.28:.55),g:false,a:n.acc});if(n.grace)VZ.push({t:t-.05,hand:n.hand==='R'?'L':'R',h:.2,g:true})});if(VZK.size>40){const keep=rac?rac.currentTime-3:0;VZ=VZ.filter(e=>e.t>keep);VZK=new Set([...VZK].filter(k=>k/1000>keep))}}
+function vizClear(){VZ=[];VZK=new Set()}
 function dSlot(){return 60/(bpm*cur.n)}
 function renderChips(){
   $q('rchips').innerHTML=RUD.map(r=>`<button data-r="${r.id}" class="${r===cur?'on':''}">${r.name}${B()[r.id]?` <i>${B()[r.id]}</i>`:''}</button>`).join('');
@@ -48,6 +51,7 @@ function sched(){
   while(nextT<rac.currentTime+.25){
     for(let b=0;b<beats;b++)click(nextT+b*beat,b===0,mode==='along'?.35:.15);
     P.tk.forEach((t,i)=>flash(i,nextT+i*d));
+    vizCycle(nextT,d);vizCycle(nextT+slots*d,d);
     if(mode==='hear')P.notes.forEach(n=>{const t=nextT+n.i*d;
       if(n.grace)hit(t-.035,n.hand==='R'?'L':'R',.2);
       hit(t,n.hand,n.acc?.9:(n.tap?.28:.6));});
@@ -55,7 +59,7 @@ function sched(){
   }
   timer=setTimeout(sched,40);
 }
-function stop(){run=false;clearTimeout(timer);hlT.forEach(clearTimeout);hlT=[];document.querySelectorAll('#stk .tk').forEach(e=>e.classList.remove('now'));$q('rhear').textContent='Hear it';$q('ralong').textContent='Play along'}
+function stop(){vizClear();run=false;clearTimeout(timer);hlT.forEach(clearTimeout);hlT=[];document.querySelectorAll('#stk .tk').forEach(e=>e.classList.remove('now'));$q('rhear').textContent='Hear it';$q('ralong').textContent='Play along'}
 function start(m){
   if(run){const same=m===mode;stop();if(same)return}
   try{rac=rac||new (window.AudioContext||window.webkitAudioContext)();rac.resume()}catch(e){return}
@@ -63,6 +67,7 @@ function start(m){
   const beat=60/bpm,t0=rac.currentTime+.1;
   for(let i=0;i<4;i++)click(t0+i*beat,i===0,.4);
   nextT=t0+4*beat;
+  vizClear();{const d0=dSlot(),sl=parse(cur).tk.length;vizCycle(nextT,d0);vizCycle(nextT+sl*d0,d0)}
   (m==='hear'?$q('rhear'):$q('ralong')).textContent='Stop';
   sched();
 }
@@ -160,7 +165,7 @@ async function rec(){
 }
 $q('rrec').onclick=rec;
 $q('rchips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const r=RUD.find(x=>x.id===b.dataset.r);if(!r)return;stop();cur=r;bpm=RT()[r.id]||r.bpm;$q('rres').innerHTML='';renderCur()});
-$q('rslider').oninput=e=>{bpm=+e.target.value;$q('rbpm').textContent=bpm};
+$q('rslider').oninput=e=>{bpm=+e.target.value;$q('rbpm').textContent=bpm;if(run&&rac){const k=rac.currentTime+.3;VZ=VZ.filter(x=>x.t<k);VZK=new Set()}};
 document.querySelectorAll('[data-rd]').forEach(b=>b.onclick=()=>{bpm=clamp(bpm+ +b.dataset.rd,30,140);$q('rbpm').textContent=bpm;$q('rslider').value=bpm});
 $q('rhear').onclick=()=>start('hear');
 $q('ralong').onclick=()=>start('along');
@@ -169,5 +174,61 @@ document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()
 bpm=RT()[cur.id]||cur.bpm;
 window.RudActive=()=>run||!!mr;
 window.RecUtil={decode,onsets};
+
+// ---------- animated "watch the sticking" view ----------
+(function(){
+  const host=$q('stk');if(!host)return;
+  const cv=document.createElement('canvas');cv.id='rviz';cv.setAttribute('aria-label','Animated view of the sticking');
+  host.parentNode.insertBefore(cv,host);
+  const ctx=cv.getContext('2d');let W=0,H=0,dpr=1;
+  function size(){const r=cv.getBoundingClientRect();dpr=window.devicePixelRatio||1;W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}
+  const COL={R:'#2C4BFF',L:'#FF2E4D'};
+  const ease=x=>Math.sin(Math.max(0,Math.min(1,x))*Math.PI/2);
+  function height(hand,now){
+    const ev=VZ.filter(e=>e.hand===hand).sort((a,b)=>a.t-b.t);
+    let e0=null,e1=null;for(const e of ev){if(e.t<=now)e0=e;else{e1=e;break}}
+    if(!e1)return {h:e0?0:.1,last:e0,hit:e0?now-e0.t:9};
+    const t0=e0?e0.t:e1.t-.6,gap=e1.t-t0,tau=now-t0,up=Math.min(.3,gap*.4),down=Math.min(.3,gap*.5);
+    let h;if(tau<up)h=e1.h*ease(tau/up);else if(gap-tau<down)h=e1.h*ease((gap-tau)/down);else h=e1.h;
+    if(!e0||tau>=up){}
+    return {h,last:e0,hit:e0?now-e0.t:9};
+  }
+  function draw(){
+    requestAnimationFrame(draw);
+    if(!cv.offsetParent)return;if(!W||Math.abs(cv.getBoundingClientRect().width-W)>1)size();
+    const now=rac?rac.currentTime:0,run_=run&&rac;
+    ctx.clearRect(0,0,W,H);
+    const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#1A0A3D');g.addColorStop(1,'#0B0420');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    const cx=W/2,padY=H-46,L=Math.min(120,W*.3),th0=14*Math.PI/180,maxRise=62*Math.PI/180;
+    // height ruler
+    const pivY0=padY+8+L*Math.sin(th0),ry=h=>pivY0-L*Math.sin(th0+h*maxRise);
+    ctx.font='700 10px Nunito,system-ui,sans-serif';ctx.fillStyle='#8C7FC4';ctx.strokeStyle='rgba(140,127,196,.35)';ctx.setLineDash([4,4]);
+    [[.28,'2 in'],[1,'8 in']].forEach(([h,l])=>{const y=ry(h);ctx.beginPath();ctx.moveTo(8,y);ctx.lineTo(W-8,y);ctx.stroke();ctx.fillText(l,10,y-3)});
+    ctx.setLineDash([]);
+    // pad
+    ctx.fillStyle='#2A1260';ctx.strokeStyle='#8A3FFC';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(cx,padY+8,Math.min(120,W*.34),22,0,0,7);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#120730';ctx.beginPath();ctx.ellipse(cx,padY+8,Math.min(104,W*.29),16,0,0,7);ctx.fill();
+    let label='',lc='#fff',sub='';
+    for(const hand of ['L','R']){
+      const dir=hand==='L'?1:-1;const tipX=cx-dir*Math.min(46,W*.13),wx=tipX-dir*L*Math.cos(th0);
+      const st=run_?height(hand,now):{h:.1,last:null,hit:9};
+      const th=th0+st.h*maxRise,pivY=pivY0,tipY=pivY-L*Math.sin(th),tipXX=wx+dir*L*Math.cos(th);
+      // stick
+      ctx.lineCap='round';ctx.strokeStyle='#0B0420';ctx.lineWidth=11;ctx.beginPath();ctx.moveTo(wx,pivY);ctx.lineTo(tipXX,tipY);ctx.stroke();
+      ctx.strokeStyle=COL[hand];ctx.lineWidth=7;ctx.beginPath();ctx.moveTo(wx,pivY);ctx.lineTo(tipXX,tipY);ctx.stroke();
+      ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(tipXX,tipY,6,0,7);ctx.fill();
+      // hand / wrist
+      ctx.fillStyle=COL[hand];ctx.strokeStyle='#0B0420';ctx.lineWidth=4;ctx.beginPath();ctx.arc(wx,pivY,17,0,7);ctx.fill();ctx.stroke();
+      ctx.fillStyle='#fff';ctx.font='400 18px Righteous,Impact,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(hand,wx,pivY+1);ctx.textAlign='left';ctx.textBaseline='alphabetic';
+      // impact ring
+      if(st.last&&st.hit>=0&&st.hit<.2){const a=1-st.hit/.2,r=10+st.hit*180;ctx.strokeStyle=st.last.g?'rgba(255,255,255,'+a*.5+')':(st.last.a?'rgba(255,200,61,'+a+')':'rgba(255,255,255,'+a+')');ctx.lineWidth=st.last.a?5:3;ctx.beginPath();ctx.ellipse(tipX,padY+8,r,r*.3,0,0,7);ctx.stroke();
+        if(st.hit<.12&&!st.last.g){label=hand;lc=COL[hand];sub=st.last.a?'ACCENT':(st.last.h<.4?'tap':'')}}
+    }
+    // big letter
+    if(run_){ctx.fillStyle=label?lc:'rgba(255,255,255,.18)';ctx.strokeStyle='#0B0420';ctx.lineWidth=6;ctx.font='400 44px Righteous,Impact,sans-serif';ctx.textAlign='center';const t=label||'';if(t){ctx.strokeText(t,cx,50);ctx.fillText(t,cx,50);ctx.font='800 11px Nunito,system-ui,sans-serif';ctx.fillStyle='#FFC83D';ctx.fillText(sub,cx,66)}ctx.textAlign='left'}
+    else{ctx.fillStyle='#C9BFF2';ctx.font='800 12px Nunito,system-ui,sans-serif';ctx.textAlign='center';ctx.fillText('Tap Hear it or Play along and watch the sticks',cx,28);ctx.textAlign='left'}
+  }
+  window.addEventListener('resize',size);size();requestAnimationFrame(draw);
+})();
 renderCur();
 })();
